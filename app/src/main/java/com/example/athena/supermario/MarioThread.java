@@ -4,13 +4,13 @@ package com.example.athena.supermario;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-public class ClockThread extends Thread {
+public class MarioThread extends Thread {
 
-    ClockView clockView;
+    MarioView marioView;
 
-    public ClockThread(ClockView cv)
+    public MarioThread (MarioView cv)
     {
-        clockView = cv;
+        marioView = cv;
     }
 
     public void run()
@@ -20,12 +20,12 @@ public class ClockThread extends Thread {
 
         while(true)
         {
-            holder = clockView.getHolder();
+            holder = marioView.getHolder();
             canvas = holder.lockCanvas();
 
             if(canvas != null)
             {
-                clockView.draw(canvas);
+                marioView.draw(canvas);
                 holder.unlockCanvasAndPost(canvas);
             }
 
@@ -40,6 +40,4 @@ public class ClockThread extends Thread {
 
         }
     }
-
-
 }

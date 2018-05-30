@@ -14,7 +14,7 @@ import android.view.SurfaceView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ClockView extends SurfaceView implements SurfaceHolder.Callback {
+public class MarioView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Paint paint;
     int color;
@@ -37,9 +37,7 @@ public class ClockView extends SurfaceView implements SurfaceHolder.Callback {
     Bitmap back1;
 
 
-
-
-    public ClockView(Context context) {
+    public MarioView(Context context) {
         super(context);
         getHolder().addCallback(this);
         setFocusable(true);
@@ -67,8 +65,6 @@ public class ClockView extends SurfaceView implements SurfaceHolder.Callback {
         heart = BitmapFactory.decodeResource(getResources(),R.drawable.heart);
         back1 = BitmapFactory.decodeResource(getResources(),R.drawable.background);
 
-
-
     }
 
     @Override
@@ -86,8 +82,8 @@ public class ClockView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        ClockThread clockThread = new ClockThread(this);
-        clockThread.start();
+        MarioThread marioThread = new MarioThread(this);
+        marioThread.start();
     }
 
     @Override

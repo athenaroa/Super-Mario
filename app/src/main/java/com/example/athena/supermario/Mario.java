@@ -9,7 +9,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,8 +20,8 @@ public class Mario extends AppCompatActivity {
     private GameView gameView;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate( Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         gameView = new GameView(this);
         setContentView(gameView);
     }
@@ -46,19 +45,19 @@ public class Mario extends AppCompatActivity {
         private Canvas canvas;
         private Bitmap bitmapRunningMario;
         private boolean isMoving;
-        private float runSpeedPerSecond = 250;
-        private float manXPos = 10, manYPos = 10;
-        private int frameWidth = 115, frameheight = 137;
-        private int frameCount = 8;
+        private float runSpeedPerSecond = 500;
+        private float manXPos = 0, manYPos = 0;
+        private int frameWidth = 150, frameheight = 150;
+        private int frameCount = 6;
         private int currentFrame = 0;
         private long fps;
         private long timeThisFrame;
         private long lastFrameChange = 0;
-        private int frameLengthInMillisecond = 100;
+        private int frameLengthInMillisecond = 50;
 
         private Rect frameToDraw = new Rect(0, 0, frameWidth, frameheight);
 
-        private RectF whereToDraw = new RectF((int)manXPos,(int)manYPos,(int) manXPos + frameWidth, frameheight);
+        private RectF whereToDraw = new RectF(manXPos,manYPos,manXPos + frameWidth, frameheight);
 
 
         private GameView(Context context) {
@@ -78,7 +77,7 @@ public class Mario extends AppCompatActivity {
                 timeThisFrame = System.currentTimeMillis() - startFrameTime;
 
                 if (timeThisFrame >= 1) {
-                    fps = 100 / timeThisFrame;
+                    fps = 1000 / timeThisFrame;
                 }
             }
         }
@@ -149,7 +148,7 @@ public class Mario extends AppCompatActivity {
         public boolean onTouchEvent(MotionEvent event) {
             switch (event.getAction() & MotionEvent.ACTION_MASK){
                 case MotionEvent.ACTION_DOWN:
-                    isMoving = isMoving;
+                    isMoving = !isMoving;
                     break;
 
             }

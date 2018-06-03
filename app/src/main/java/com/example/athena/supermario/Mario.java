@@ -1,6 +1,7 @@
 package com.example.athena.supermario;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -23,6 +24,7 @@ public class Mario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         gameView = new GameView(this);
         setContentView(gameView);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Override
@@ -43,10 +45,11 @@ public class Mario extends AppCompatActivity {
         private volatile boolean playing;
         private Canvas canvas;
         private Bitmap bitmapRunningMario;
+        private Bitmap bitmapBackground;
         private boolean isMoving;
         private float runSpeedPerSecond = 200;
-        private float manXPos = 10, manYPos = 10;
         private int frameWidth = 120, frameheight = 120;
+        private float manXPos = 10, manYPos = frameheight * 5;
         private int frameCount = 6;
         private int currentFrame = 0;
         private long fps;
@@ -55,8 +58,8 @@ public class Mario extends AppCompatActivity {
         private int frameLengthInMillisecond = 20;
 
         private Rect frameToDraw = new Rect(0, 0, frameWidth, frameheight);
-
         private RectF whereToDraw = new RectF(manXPos,manYPos,manXPos + frameWidth, frameheight);
+       // private Rect drawBackground = new Rect(0,0, getWidth(),getHeight());
 
 
         private GameView(Context context) {
@@ -64,6 +67,8 @@ public class Mario extends AppCompatActivity {
             ourHolder = getHolder();
             bitmapRunningMario = BitmapFactory.decodeResource(getResources(), R.drawable.normalrunmmario);
             bitmapRunningMario = Bitmap.createScaledBitmap(bitmapRunningMario, frameWidth * frameCount, frameheight, false);
+            //bitmapBackground = BitmapFactory.decodeResource(getResources(),R.drawable.background);
+
         }
 
         @Override
@@ -85,13 +90,15 @@ public class Mario extends AppCompatActivity {
             if (isMoving) {
                 manXPos = manXPos + runSpeedPerSecond / fps;
                 if (manXPos > getWidth()) {
-                    manYPos += (int) frameheight;
+                    //manYPos += (int) frameheight; this line makes mario move down the screen
                     manXPos = 10;
                 }
 
                 if (manYPos + frameheight > getHeight()) {
                     manYPos = 10;
                 }
+
+
             }
 
         }
@@ -120,7 +127,8 @@ public class Mario extends AppCompatActivity {
             if(ourHolder.getSurface().isValid()){
                 canvas = ourHolder.lockCanvas();
                 canvas.drawColor(Color.WHITE);
-                whereToDraw.set((int) manXPos, (int) manYPos, (int) manXPos + frameWidth, (int) manYPos + frameheight);
+                //canvas.drawBitmap(bitmapBackground,null,drawBackground,null);
+                whereToDraw.set((int) manXPos, (int) manYPos, (int) manXPos + frameWidth, manYPos + frameheight);
                 manageCurrentFrame();
                 canvas.drawBitmap(bitmapRunningMario,frameToDraw,whereToDraw,null);
                 ourHolder.unlockCanvasAndPost(canvas);

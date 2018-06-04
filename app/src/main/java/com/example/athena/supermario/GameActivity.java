@@ -14,10 +14,10 @@ public class GameActivity extends AppCompatActivity {
 
         //Initializing game view object
         gameView = new GameView(this);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //adding it to contentview
         setContentView(gameView);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
     }
 
 

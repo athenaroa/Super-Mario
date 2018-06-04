@@ -10,23 +10,10 @@ public class Player {
     private Bitmap jumpingMario;
     private int marioType = 0;
 
-    //coordinates
-    private int x;
-    private int y;
-
-    //motion speed of character
-    private int speed = 0;
-
     private boolean jump;
-
-
-
 
     //constructor
     public Player(Context context) {
-        x = 75;
-        y = 50;
-        speed = 1;
         //Getting bitmap from drawable resource
         runningMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.normalrunmmario);
         jumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmario);
@@ -41,10 +28,6 @@ public class Player {
         return marioType;
     }
 
-    public void update(){
-        x = 10;
-    }
-
     public Bitmap getBitmap() {
         if(jump == true)
         {
@@ -57,18 +40,5 @@ public class Player {
             return runningMario;
         }
 
-    }
-
-    public int getX() {
-        System.out.println("x = " + x);
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 }

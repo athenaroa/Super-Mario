@@ -28,7 +28,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private float runSpeedPerSecond = 200;
     private int frameWidth = 190, frameHeight = 240; //running mario 260,200 , jumping mario 190, 240
-    private float manXPos = 10, manYPos = frameHeight ;
+    private float manXPos = 10, manYPos = frameHeight * 3 ;
     private int frameCount = 6;
     private int currentFrame = 0;
     private long fps;
@@ -78,8 +78,9 @@ public class GameView extends SurfaceView implements Runnable {
         manXPos = manXPos + runSpeedPerSecond / fps;
         if(manXPos > getWidth()){
             manXPos = 10;
-            //player.update();
         }
+
+        //update the coordinates of Items
 
 
 
@@ -105,18 +106,20 @@ public class GameView extends SurfaceView implements Runnable {
         //Checking if surface is valid
         if(surfaceHolder.getSurface().isValid()){
             canvas = surfaceHolder.lockCanvas();
-            canvas.drawColor(Color.WHITE);
+            canvas.drawColor(Color.BLUE);
 
             bitmap = player.getBitmap();
             if(player.whichMario() == 1)
             {
                 frameWidth = 260;
                 frameHeight = 200;
+                manYPos = (frameHeight * 3) + 100;
             }
             else if(player.whichMario() == 2)
             {
                 frameWidth = 165;
                 frameHeight = 220;
+                manYPos = (frameHeight * 3) - 100;
             }
             manageCurrentFrame();
 
@@ -132,7 +135,7 @@ public class GameView extends SurfaceView implements Runnable {
     private void control() {
         //control the frames per seconds drawn
         try {
-            gameThread.sleep(17); //calling a delay method of Threat which will make our frame rate 60fps
+            gameThread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

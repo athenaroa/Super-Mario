@@ -110,7 +110,11 @@ public class Player {
     }
 
     public void jump(){
-        jump = !jump;
+        jump = true;
+    }
+
+    public void canceljump(){
+        jump = false;
     }
 
     public int whichMario(){

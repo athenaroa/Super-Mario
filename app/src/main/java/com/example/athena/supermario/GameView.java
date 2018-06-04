@@ -76,6 +76,7 @@ public class GameView extends SurfaceView implements Runnable {
             update();
             //to draw the frame
             draw();
+            player.canceljump();
             timeThisFrame = System.currentTimeMillis() - startFrameTime;
             if(timeThisFrame >= 1){
                 fps = 1000 / timeThisFrame;
@@ -179,6 +180,7 @@ public class GameView extends SurfaceView implements Runnable {
                     System.out.println("U to D");
                 } else if(move == -2){
                     System.out.println("D to U");
+                    player.jump();
                 }
                 else {
                     System.out.println("Error occurred");
@@ -187,11 +189,10 @@ public class GameView extends SurfaceView implements Runnable {
                 break;
             }
 
-
             case MotionEvent.ACTION_UP: {
                 //player.jump();
-                //pause();
 
+                pause();
                 final int pointIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointIndex);
                 final float y = MotionEventCompat.getY(event, pointIndex);
@@ -217,6 +218,7 @@ public class GameView extends SurfaceView implements Runnable {
                 {
                     //This was our active pointer going up. Choose a new
                     //active pointer and adjust accordingly.
+
                     final int newPointerIndex = pointerIndex == 0 ? 1: 0;
                     mLastTouchX = MotionEventCompat.getX(event, newPointerIndex);
                     mLastTouchY = MotionEventCompat.getY(event,newPointerIndex);
@@ -230,13 +232,13 @@ public class GameView extends SurfaceView implements Runnable {
             }
             case MotionEvent.ACTION_DOWN: {
                 //player.jump();
-                //resume(); //resume forward
-
+                resume(); //resume forward
                 final int pointIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointIndex);
                 final float y = MotionEventCompat.getY(event, pointIndex);
 
                 System.out.println("ACTION_DOWN");
+
                 // System.out.println("x = " + x + "\t" + "y = " + y);
 
                 //Remember where we started (for dragging)

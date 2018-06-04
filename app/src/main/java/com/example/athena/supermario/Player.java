@@ -98,7 +98,6 @@ public class Player {
         return manYPos;
     }
 
-
     public void setmanXPos(float increment, int width){
          this.manXPos = manXPos + increment;
         if(manXPos > width ){

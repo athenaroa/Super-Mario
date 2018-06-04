@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import static android.view.MotionEvent.INVALID_POINTER_ID;
 
 public class GameView extends SurfaceView implements Runnable {
     //boolean variable to track if the game is playing or not
@@ -39,6 +42,14 @@ public class GameView extends SurfaceView implements Runnable {
     private Rect frameToDraw = new Rect(0, 0, 190, 240);
     private RectF whereToDraw = new RectF(10, 580,
             10 + 190, 240);
+
+
+    private int mActivePointerId = INVALID_POINTER_ID;
+    private float mLastTouchX;
+    private float mLastTouchY;
+    public float touchPosX;
+    public float touchPosY;
+
 
 
     Bitmap bitmap;
@@ -79,13 +90,6 @@ public class GameView extends SurfaceView implements Runnable {
         //update the coordinates of our character
         player.setmanXPos(runSpeedPerSecond/fps, getWidth());
 
-        /*
-        manXPos = manXPos + runSpeedPerSecond / fps;
-        if(manXPos > getWidth()){
-            manXPos = 10;
-        }
-        */
-        //update the coordinates of Items
     }
 
     public void manageCurrentFrame() {
@@ -106,43 +110,11 @@ public class GameView extends SurfaceView implements Runnable {
     }
     private void draw() {
         //draw the character to the canvas
-        //Checking if surface is valid
         if(surfaceHolder.getSurface().isValid()){
             canvas = surfaceHolder.lockCanvas();
             canvas.drawColor(Color.WHITE);
 
-            //paint.setColor(Color.GREEN);
-            //canvas.drawRect(0,0,getWidth()/4,getHeight()/4,paint);
-
             bitmap = player.getBitmap();
-
-            /*
-            switch(player.whichMario()){
-                case 1: //normal running mario
-                    frameWidth = 260;
-                    frameHeight = 200;
-                    manYPos = (frameHeight * 2) + 100;
-                    break;
-                case 2: //normal jumping mario
-                    frameWidth = 260; //super jumping mario 165
-                    frameHeight = 200; //super jumping mario 220
-                    manYPos = (frameHeight * 2) - 100;
-                    break;
-                case 3: //SUPER running mario
-                    frameWidth = 0; //super jumping mario 165
-                    frameHeight = 0; //super jumping mario 220
-                    manYPos = 0;
-                    break;
-                case 4: //SUPER jumping mario
-                    frameWidth = 165;
-                    frameHeight = 220;
-                    manYPos = 0;
-                    break;
-            }
-            */
-
-            //frameToDraw= new Rect(0, 0, player.getFrameWidth(), player.getFrameHeight());
-
             manageCurrentFrame();
 
             bitmap = Bitmap.createScaledBitmap(bitmap, player.getFrameWidth() * frameCount, player.getFrameHeight(), false);
@@ -166,13 +138,118 @@ public class GameView extends SurfaceView implements Runnable {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch(event.getAction() & MotionEvent.ACTION_MASK){
-            case MotionEvent.ACTION_UP:
-                player.jump();
+
+        final int action = MotionEventCompat.getActionMasked(event);
+
+        int move = 0; //L to R = 1, R to L = -1, U to D = 2
+
+        switch(action/*event.getAction() & MotionEvent.ACTION_MASK*/){
+            case MotionEvent.ACTION_MOVE: {
+                final int pointerIndex = MotionEventCompat.findPointerIndex(event, mActivePointerId);
+                final float x = MotionEventCompat.getX(event, pointerIndex);
+                final float y = MotionEventCompat.getY(event, pointerIndex);
+                final float dx = x - mLastTouchX;
+                final float dy = y - mLastTouchY;
+
+                touchPosX += dx;
+                touchPosY += dy;
+
+                invalidate();
+
+                //Remember this touch position for the next move event
+                mLastTouchX = x;
+                mLastTouchY = y;
+
+                if (dx > 0) {
+                    move = 1;
+                } else if (dx < 0) {
+                    move = -1;
+                } else if (dy > 0) {
+                    move = 2;
+                } else if(dy < 0){
+                    move = -2;
+                }
+                else {}
+
+                if (move == 1) {
+                    System.out.println("L to R");
+                } else if (move == -1) {
+                    System.out.println("R to L");
+                } else if (move == 2) {
+                    System.out.println("U to D");
+                } else if(move == -2){
+                    System.out.println("D to U");
+                }
+                else {
+                    System.out.println("Error occurred");
+                }
+
                 break;
-            case MotionEvent.ACTION_DOWN:
-                player.jump();
+            }
+
+
+            case MotionEvent.ACTION_UP: {
+                //player.jump();
+                //pause();
+
+                final int pointIndex = MotionEventCompat.getActionIndex(event);
+                final float x = MotionEventCompat.getX(event, pointIndex);
+                final float y = MotionEventCompat.getY(event, pointIndex);
+
+                System.out.println("ACTION_UP");
+                //Remember where we started (for dragging)
+
+                mLastTouchX = x;
+                mLastTouchY = y;
+                //Save the ID of this pointer (for dragging)
+                mActivePointerId = MotionEventCompat.getPointerId(event, 0);
+
                 break;
+            }
+
+            case (MotionEvent.ACTION_POINTER_UP):
+            {
+                //System.out.println("ACTION_POINTER_UP");
+                final int pointerIndex = MotionEventCompat.getActionIndex(event);
+                final int pointerId = MotionEventCompat.getPointerId(event,pointerIndex);
+
+                if(pointerId == mActivePointerId)
+                {
+                    //This was our active pointer going up. Choose a new
+                    //active pointer and adjust accordingly.
+                    final int newPointerIndex = pointerIndex == 0 ? 1: 0;
+                    mLastTouchX = MotionEventCompat.getX(event, newPointerIndex);
+                    mLastTouchY = MotionEventCompat.getY(event,newPointerIndex);
+                    mActivePointerId = MotionEventCompat.getPointerId(event,newPointerIndex);
+                }
+            }
+            case (MotionEvent.ACTION_CANCEL):
+            {
+                mActivePointerId = INVALID_POINTER_ID;
+                break;
+            }
+            case MotionEvent.ACTION_DOWN: {
+                //player.jump();
+                //resume(); //resume forward
+
+                final int pointIndex = MotionEventCompat.getActionIndex(event);
+                final float x = MotionEventCompat.getX(event, pointIndex);
+                final float y = MotionEventCompat.getY(event, pointIndex);
+
+                System.out.println("ACTION_DOWN");
+                // System.out.println("x = " + x + "\t" + "y = " + y);
+
+                //Remember where we started (for dragging)
+                mLastTouchX = x;
+                mLastTouchY = y;
+                //Save the ID of this pointer (for dragging)
+                mActivePointerId = MotionEventCompat.getPointerId(event, 0);
+
+                //System.out.println("mActivePointId = " + mActivePointerId);
+
+
+                break;
+            }
         }
         return true;
     }

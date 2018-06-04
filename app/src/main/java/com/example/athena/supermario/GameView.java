@@ -1,11 +1,13 @@
 package com.example.athena.supermario;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -25,8 +27,8 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     private float runSpeedPerSecond = 200;
-    private int frameWidth = 360, frameHeight = 350;
-    private float manXPos = 10, manYPos = frameHeight * 2;
+    private int frameWidth = 190, frameHeight = 240; //running mario 260,200 , jumping mario 190, 240
+    private float manXPos = 10, manYPos = frameHeight ;
     private int frameCount = 6;
     private int currentFrame = 0;
     private long fps;
@@ -36,9 +38,8 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Rect frameToDraw = new Rect(0, 0, frameWidth, frameHeight);
     private RectF whereToDraw = new RectF(manXPos, manYPos, manXPos + frameWidth, frameHeight);
-    private Rect drawBackground = new Rect(0, 0, getWidth(), getHeight());
 
-
+    Bitmap bitmap;
 
     //Class constructor
     public GameView(Context context) {
@@ -105,8 +106,23 @@ public class GameView extends SurfaceView implements Runnable {
         if(surfaceHolder.getSurface().isValid()){
             canvas = surfaceHolder.lockCanvas();
             canvas.drawColor(Color.WHITE);
-            whereToDraw.set((int) manXPos, (int) manYPos, (int) manXPos + frameWidth, manYPos + frameHeight);
+
+            bitmap = player.getBitmap();
+            if(player.whichMario() == 1)
+            {
+                frameWidth = 260;
+                frameHeight = 200;
+            }
+            else if(player.whichMario() == 2)
+            {
+                frameWidth = 165;
+                frameHeight = 220;
+            }
             manageCurrentFrame();
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, frameWidth * frameCount, frameHeight, false);
+
+            whereToDraw.set((int) manXPos, (int) manYPos, (int) manXPos + frameWidth, manYPos + frameHeight);
             canvas.drawBitmap(player.getBitmap(),frameToDraw,whereToDraw,null);
             surfaceHolder.unlockCanvasAndPost(canvas);
 
@@ -120,6 +136,19 @@ public class GameView extends SurfaceView implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch(event.getAction() & MotionEvent.ACTION_MASK){
+            case MotionEvent.ACTION_UP:
+                //player.jump();
+                break;
+            case MotionEvent.ACTION_DOWN:
+                player.jump();
+                break;
+        }
+        return true;
     }
 
     public void pause() {

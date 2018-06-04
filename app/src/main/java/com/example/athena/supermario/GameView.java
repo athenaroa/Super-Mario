@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -22,6 +24,22 @@ public class GameView extends SurfaceView implements Runnable {
     private SurfaceHolder surfaceHolder;
 
 
+    private float runSpeedPerSecond = 200;
+    private int frameWidth = 120, frameHeight = 120;
+    private float manXPos = 10, manYPos = frameHeight * 5;
+    private int frameCount = 6;
+    private int currentFrame = 0;
+    private long fps;
+    private long timeThisFrame;
+    private long lastFrameChange = 0;
+    private int frameLengthInMillisecond = 20;
+
+    private Rect frameToDraw = new Rect(0, 0, frameWidth, frameHeight);
+    private RectF whereToDraw = new RectF(manXPos, manYPos, manXPos + frameWidth, frameHeight);
+    private Rect drawBackground = new Rect(0, 0, getWidth(), getHeight());
+
+
+
     //Class constructor
     public GameView(Context context) {
         super(context);
@@ -38,10 +56,17 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (playing) {
+
+            long startFrameTime = System.currentTimeMillis();
             //to update the frame
             update();
             //to draw the frame
             draw();
+            timeThisFrame = System.currentTimeMillis() - startFrameTime;
+            if(timeThisFrame >= 1){
+                fps = 1000 / timeThisFrame;
+            }
+
             //to control
             control();
         }
@@ -50,20 +75,40 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void update() {
         //update the coordinates of our character
-        player.update();
-    }
+        manXPos = manXPos + runSpeedPerSecond / fps;
+        if(manXPos > getWidth()){
+            manXPos = 10;
+            //player.update();
+        }
 
+
+
+    }
+    public void manageCurrentFrame() {
+        long time = System.currentTimeMillis();
+
+        if (time > lastFrameChange + frameLengthInMillisecond)
+        {
+            lastFrameChange = time;
+            currentFrame++;
+
+            if (currentFrame >= frameCount)
+            {
+                    currentFrame = 0;
+            }
+        }
+        frameToDraw.left = currentFrame * frameWidth;
+        frameToDraw.right = frameToDraw.left + frameWidth;
+    }
     private void draw() {
         //draw the character to the canvas
         //Checking if surface is valid
         if(surfaceHolder.getSurface().isValid()){
-            //locking the canvas
             canvas = surfaceHolder.lockCanvas();
-            //drawing a background color for canvas
             canvas.drawColor(Color.WHITE);
-            //drawing the player
-            canvas.drawBitmap(player.getBitmap(),player.getX(),player.getY(),paint);
-            //unlocking the canvas
+            whereToDraw.set((int) manXPos, (int) manYPos, (int) manXPos + frameWidth, manYPos + frameHeight);
+            manageCurrentFrame();
+            canvas.drawBitmap(player.getBitmap(),frameToDraw,whereToDraw,null);
             surfaceHolder.unlockCanvasAndPost(canvas);
 
         }

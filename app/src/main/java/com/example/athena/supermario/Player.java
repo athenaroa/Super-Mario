@@ -15,15 +15,7 @@ public class Player {
     //motion speed of character
     private int speed = 0;
 
-    private float runSpeedPerSecond = 200;
-    private int frameWidth = 120, frameHeight = 120;
-    private float manXPos = 10, manYPos = frameHeight * 5;
-    private int frameCount = 6;
-    private int currentFrame = 0;
-    private long fps;
-    private long timeThisFrame;
-    private long lastFrameChange = 0;
-    private int frameLengthInMillisecond = 20;
+
 
     //constructor
     public Player(Context context) {
@@ -35,8 +27,7 @@ public class Player {
     }
 
     public void update(){
-        //updating x coordinate
-        x++;
+        x = 10;
     }
 
     public Bitmap getBitmap() {
@@ -44,6 +35,7 @@ public class Player {
     }
 
     public int getX() {
+        System.out.println("x = " + x);
         return x;
     }
 

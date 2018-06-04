@@ -81,6 +81,20 @@ public class Player {
     }
 
     public float getmanYPos(){
+        switch(whichMario()){
+            case 1: //normal running mario
+                manYPos = (frameHeight * 2) + 100;
+                break;
+            case 2: //normal jumping mario
+                manYPos = (frameHeight * 2) - 100;
+                break;
+            case 3: //SUPER running mario
+                manYPos = 0;
+                break;
+            case 4: //SUPER jumping mario
+                manYPos = 0;
+                break;
+        }
         return manYPos;
     }
 

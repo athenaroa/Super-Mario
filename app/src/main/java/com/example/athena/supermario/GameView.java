@@ -86,7 +86,6 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-
     private void update() {
         //update the coordinates of our character
         player.setmanXPos(runSpeedPerSecond/fps, getWidth());
@@ -172,8 +171,10 @@ public class GameView extends SurfaceView implements Runnable {
                 }
                 else {}
 
+
                 if (move == 1) {
                     System.out.println("L to R");
+                    resume();
                 } else if (move == -1) {
                     System.out.println("R to L");
                 } else if (move == 2) {
@@ -185,12 +186,10 @@ public class GameView extends SurfaceView implements Runnable {
                 else {
                     System.out.println("Error occurred");
                 }
-
                 break;
             }
 
             case MotionEvent.ACTION_UP: {
-                //player.jump();
 
                 pause();
                 final int pointIndex = MotionEventCompat.getActionIndex(event);
@@ -199,7 +198,6 @@ public class GameView extends SurfaceView implements Runnable {
 
                 System.out.println("ACTION_UP");
                 //Remember where we started (for dragging)
-
                 mLastTouchX = x;
                 mLastTouchY = y;
                 //Save the ID of this pointer (for dragging)
@@ -232,7 +230,7 @@ public class GameView extends SurfaceView implements Runnable {
             }
             case MotionEvent.ACTION_DOWN: {
                 //player.jump();
-                resume(); //resume forward
+                //resume(); //resume forward
                 final int pointIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointIndex);
                 final float y = MotionEventCompat.getY(event, pointIndex);

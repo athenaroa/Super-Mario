@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SuperMario</string>
+    <string name="JUMP">"JUMP"</string>
 </resources>

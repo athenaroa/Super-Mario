@@ -14,17 +14,24 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.Window;
 
-public class Mario extends AppCompatActivity {
+
+
+public class Mario extends AppCompatActivity{
 
     private GameView gameView;
 
     @Override
-    public void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         gameView = new GameView(this);
+
+
         setContentView(gameView);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
     @Override
@@ -45,7 +52,8 @@ public class Mario extends AppCompatActivity {
         private volatile boolean playing;
         private Canvas canvas;
         private Bitmap bitmapRunningMario;
-        private Bitmap bitmapBackground;
+        private Bitmap bitmapJumpMario;
+        private Bitmap background;
         private boolean isMoving;
         private float runSpeedPerSecond = 200;
         private int frameWidth = 120, frameheight = 120;
@@ -58,16 +66,22 @@ public class Mario extends AppCompatActivity {
         private int frameLengthInMillisecond = 20;
 
         private Rect frameToDraw = new Rect(0, 0, frameWidth, frameheight);
-        private RectF whereToDraw = new RectF(manXPos,manYPos,manXPos + frameWidth, frameheight);
-       // private Rect drawBackground = new Rect(0,0, getWidth(),getHeight());
+        private RectF whereToDraw = new RectF(manXPos, manYPos, manXPos + frameWidth, frameheight);
+        private Rect drawBackground = new Rect(0, 0, getWidth(), getHeight());
 
 
-        private GameView(Context context) {
+
+
+        public GameView(Context context) {
             super(context);
             ourHolder = getHolder();
             bitmapRunningMario = BitmapFactory.decodeResource(getResources(), R.drawable.normalrunmmario);
             bitmapRunningMario = Bitmap.createScaledBitmap(bitmapRunningMario, frameWidth * frameCount, frameheight, false);
-            //bitmapBackground = BitmapFactory.decodeResource(getResources(),R.drawable.background);
+
+            bitmapJumpMario = BitmapFactory.decodeResource(getResources(), R.drawable.superjumpmario);
+            bitmapJumpMario = Bitmap.createScaledBitmap(bitmapJumpMario, frameWidth * frameCount, frameheight, false);
+
+            background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
 
         }
 
@@ -97,10 +111,7 @@ public class Mario extends AppCompatActivity {
                 if (manYPos + frameheight > getHeight()) {
                     manYPos = 10;
                 }
-
-
             }
-
         }
 
         public void manageCurrentFrame() {
@@ -111,41 +122,38 @@ public class Mario extends AppCompatActivity {
                     lastFrameChange = time;
                     currentFrame++;
 
-                    if(currentFrame >= frameCount){
+                    if (currentFrame >= frameCount) {
                         currentFrame = 0;
                     }
-
                 }
             }
-
             frameToDraw.left = currentFrame * frameWidth;
             frameToDraw.right = frameToDraw.left + frameWidth;
-
         }
 
-        public void draw(){
-            if(ourHolder.getSurface().isValid()){
+        public void draw() {
+            if (ourHolder.getSurface().isValid()) {
                 canvas = ourHolder.lockCanvas();
-                canvas.drawColor(Color.WHITE);
-                //canvas.drawBitmap(bitmapBackground,null,drawBackground,null);
+                canvas.drawColor(Color.RED);
+                //canvas.drawBitmap(background, null, drawBackground, null);
                 whereToDraw.set((int) manXPos, (int) manYPos, (int) manXPos + frameWidth, manYPos + frameheight);
                 manageCurrentFrame();
-                canvas.drawBitmap(bitmapRunningMario,frameToDraw,whereToDraw,null);
+                canvas.drawBitmap(bitmapRunningMario, frameToDraw, whereToDraw, null);
                 ourHolder.unlockCanvasAndPost(canvas);
             }
         }
 
-        public void pause(){
+        public void pause() {
             playing = false;
 
-            try{
+            try {
                 gameThread.join();
-            } catch(InterruptedException e){
+            } catch (InterruptedException e) {
                 Log.e("Err", "Joining Thread");
             }
         }
 
-        public void resume(){
+        public void resume() {
             playing = true;
             gameThread = new Thread(this);
             gameThread.start();
@@ -153,17 +161,16 @@ public class Mario extends AppCompatActivity {
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
-            switch (event.getAction() & MotionEvent.ACTION_MASK){
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                     isMoving = !isMoving;
                     break;
-
             }
             return true;
         }
+
     }
 }
-
 
 
 

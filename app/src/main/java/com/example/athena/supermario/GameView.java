@@ -25,8 +25,8 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     private float runSpeedPerSecond = 200;
-    private int frameWidth = 120, frameHeight = 120;
-    private float manXPos = 10, manYPos = frameHeight * 5;
+    private int frameWidth = 360, frameHeight = 350;
+    private float manXPos = 10, manYPos = frameHeight * 2;
     private int frameCount = 6;
     private int currentFrame = 0;
     private long fps;
@@ -66,7 +66,6 @@ public class GameView extends SurfaceView implements Runnable {
             if(timeThisFrame >= 1){
                 fps = 1000 / timeThisFrame;
             }
-
             //to control
             control();
         }

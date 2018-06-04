@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/mariostartup"
-    tools:context=".MainActivity">
+    tools:context="com.example.athena.supermario.MainActivity">
 
     <ImageButton
         android:id="@+id/buttonPlay"
         android:background="@drawable/mariostartup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:contentDescription="TODO" />
 
 </RelativeLayout>

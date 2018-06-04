@@ -8,6 +8,7 @@ public class Player {
     //Bitmap to get Character from image
     private Bitmap runningMario;
     private Bitmap jumpingMario;
+    private Bitmap superjumpingMario;
     private int marioType = 0;
 
     private boolean jump;
@@ -16,8 +17,14 @@ public class Player {
     public Player(Context context) {
         //Getting bitmap from drawable resource
         runningMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.normalrunmmario);
-        jumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmario);
+        jumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.normaljumpmario);
+        superjumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmario);
+
         jump = false;
+    }
+
+    public void setMarioType(int changeMT){
+        this.marioType = changeMT;
     }
 
     public void jump(){

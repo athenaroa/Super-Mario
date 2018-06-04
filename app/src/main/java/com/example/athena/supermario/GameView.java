@@ -27,8 +27,8 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     private float runSpeedPerSecond = 200;
-    private int frameWidth = 190, frameHeight = 240; //running mario 260,200 , jumping mario 190, 240
-    private float manXPos = 10, manYPos = frameHeight * 3 ;
+    private int frameWidth = 190, frameHeight = 240;
+    private float manXPos = 10, manYPos = (frameHeight * 2) + 100 ;
     private int frameCount = 6;
     private int currentFrame = 0;
     private long fps;
@@ -38,6 +38,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Rect frameToDraw = new Rect(0, 0, frameWidth, frameHeight);
     private RectF whereToDraw = new RectF(manXPos, manYPos, manXPos + frameWidth, frameHeight);
+
 
     Bitmap bitmap;
 
@@ -81,10 +82,8 @@ public class GameView extends SurfaceView implements Runnable {
         }
 
         //update the coordinates of Items
-
-
-
     }
+
     public void manageCurrentFrame() {
         long time = System.currentTimeMillis();
 
@@ -106,21 +105,56 @@ public class GameView extends SurfaceView implements Runnable {
         //Checking if surface is valid
         if(surfaceHolder.getSurface().isValid()){
             canvas = surfaceHolder.lockCanvas();
-            canvas.drawColor(Color.BLUE);
+            canvas.drawColor(Color.WHITE);
+
+            //paint.setColor(Color.GREEN);
+            //canvas.drawRect(0,0,getWidth()/4,getHeight()/4,paint);
 
             bitmap = player.getBitmap();
+
+            switch(player.whichMario()){
+                case 1: //normal running mario
+                    frameWidth = 260;
+                    frameHeight = 200;
+                    manYPos = (frameHeight * 2) + 100;
+                    break;
+                case 2: //normal jumping mario
+                    frameWidth = 260; //super jumping mario 165
+                    frameHeight = 200; //super jumping mario 220
+                    manYPos = (frameHeight * 2) - 100;
+                    break;
+                case 3: //SUPER running mario
+                    frameWidth = 0; //super jumping mario 165
+                    frameHeight = 0; //super jumping mario 220
+                    manYPos = 0;
+                    break;
+                case 4: //SUPER jumping mario
+                    frameWidth = 165;
+                    frameHeight = 220;
+                    manYPos = 0;
+                    break;
+            }
+            /*
+            if(player.whichMario() == 4) ///super jumping mario
+            {
+                frameWidth = 260; //super jumping mario 165
+                frameHeight = 200; //super jumping mario 220
+                manYPos = (frameHeight * 2) - 100;
+            }
+
+            if(player.whichMario() == 2)
+            {
+                frameWidth = 260; //super jumping mario 165
+                frameHeight = 200; //super jumping mario 220
+                manYPos = (frameHeight * 2) - 100;
+            }
             if(player.whichMario() == 1)
             {
                 frameWidth = 260;
                 frameHeight = 200;
-                manYPos = (frameHeight * 3) + 100;
+                manYPos = (frameHeight * 2) + 100;
             }
-            else if(player.whichMario() == 2)
-            {
-                frameWidth = 165;
-                frameHeight = 220;
-                manYPos = (frameHeight * 3) - 100;
-            }
+            */
             manageCurrentFrame();
 
             bitmap = Bitmap.createScaledBitmap(bitmap, frameWidth * frameCount, frameHeight, false);
@@ -145,7 +179,7 @@ public class GameView extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction() & MotionEvent.ACTION_MASK){
             case MotionEvent.ACTION_UP:
-                //player.jump();
+                player.jump();
                 break;
             case MotionEvent.ACTION_DOWN:
                 player.jump();

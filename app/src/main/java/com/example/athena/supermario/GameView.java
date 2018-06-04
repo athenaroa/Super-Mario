@@ -27,8 +27,8 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     private float runSpeedPerSecond = 200;
-    private int frameWidth = 190, frameHeight = 240;
-    private float manXPos = 10, manYPos = (frameHeight * 2) + 100 ;
+    //private int frameWidth = 190, frameHeight = 240;
+   // private float manXPos = 10, manYPos = (frameHeight * 2) + 100 ;
     private int frameCount = 6;
     private int currentFrame = 0;
     private long fps;
@@ -36,8 +36,9 @@ public class GameView extends SurfaceView implements Runnable {
     private long lastFrameChange = 0;
     private int frameLengthInMillisecond = 20;
 
-    private Rect frameToDraw = new Rect(0, 0, frameWidth, frameHeight);
-    private RectF whereToDraw = new RectF(manXPos, manYPos, manXPos + frameWidth, frameHeight);
+    private Rect frameToDraw = new Rect(0, 0, 190, 240);
+    private RectF whereToDraw = new RectF(10, 580,
+            10 + 190, 240);
 
 
     Bitmap bitmap;
@@ -76,11 +77,14 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void update() {
         //update the coordinates of our character
+        player.setmanXPos(runSpeedPerSecond/fps, getWidth());
+
+        /*
         manXPos = manXPos + runSpeedPerSecond / fps;
         if(manXPos > getWidth()){
             manXPos = 10;
         }
-
+        */
         //update the coordinates of Items
     }
 
@@ -97,8 +101,8 @@ public class GameView extends SurfaceView implements Runnable {
                     currentFrame = 0;
             }
         }
-        frameToDraw.left = currentFrame * frameWidth;
-        frameToDraw.right = frameToDraw.left + frameWidth;
+        frameToDraw.left = currentFrame * player.getFrameWidth();
+        frameToDraw.right = frameToDraw.left + player.getFrameWidth();
     }
     private void draw() {
         //draw the character to the canvas
@@ -112,6 +116,7 @@ public class GameView extends SurfaceView implements Runnable {
 
             bitmap = player.getBitmap();
 
+            /*
             switch(player.whichMario()){
                 case 1: //normal running mario
                     frameWidth = 260;
@@ -134,32 +139,16 @@ public class GameView extends SurfaceView implements Runnable {
                     manYPos = 0;
                     break;
             }
-            /*
-            if(player.whichMario() == 4) ///super jumping mario
-            {
-                frameWidth = 260; //super jumping mario 165
-                frameHeight = 200; //super jumping mario 220
-                manYPos = (frameHeight * 2) - 100;
-            }
-
-            if(player.whichMario() == 2)
-            {
-                frameWidth = 260; //super jumping mario 165
-                frameHeight = 200; //super jumping mario 220
-                manYPos = (frameHeight * 2) - 100;
-            }
-            if(player.whichMario() == 1)
-            {
-                frameWidth = 260;
-                frameHeight = 200;
-                manYPos = (frameHeight * 2) + 100;
-            }
             */
+
+            //frameToDraw= new Rect(0, 0, player.getFrameWidth(), player.getFrameHeight());
+
             manageCurrentFrame();
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, frameWidth * frameCount, frameHeight, false);
+            bitmap = Bitmap.createScaledBitmap(bitmap, player.getFrameWidth() * frameCount, player.getFrameHeight(), false);
 
-            whereToDraw.set((int) manXPos, (int) manYPos, (int) manXPos + frameWidth, manYPos + frameHeight);
+            whereToDraw.set((int) player.getmanXPos(), (int) player.getmanYPos(),
+                    (int) player.getmanXPos() + player.getFrameWidth(), player.getmanYPos() + player.getFrameHeight());
             canvas.drawBitmap(player.getBitmap(),frameToDraw,whereToDraw,null);
             surfaceHolder.unlockCanvasAndPost(canvas);
 

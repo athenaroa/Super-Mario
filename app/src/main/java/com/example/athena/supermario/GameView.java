@@ -2,6 +2,7 @@ package com.example.athena.supermario;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,13 +24,15 @@ public class GameView extends SurfaceView implements Runnable {
     //adding the player to this class
     private Player player;
 
+
+
     //These objects will be used for drawing
     private Paint paint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
 
 
-    private float runSpeedPerSecond = 200;
+    private float runSpeedPerSecond = 100; //200
     //private int frameWidth = 190, frameHeight = 240;
    // private float manXPos = 10, manYPos = (frameHeight * 2) + 100 ;
     private int frameCount = 6;
@@ -37,7 +40,7 @@ public class GameView extends SurfaceView implements Runnable {
     private long fps;
     private long timeThisFrame;
     private long lastFrameChange = 0;
-    private int frameLengthInMillisecond = 20;
+    private int frameLengthInMillisecond = 60;
 
     private Rect frameToDraw = new Rect(0, 0, 190, 240);
     private RectF whereToDraw = new RectF(10, 580,
@@ -53,6 +56,7 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     Bitmap bitmap;
+    Bitmap background1;
 
     //Class constructor
     public GameView(Context context) {
@@ -64,6 +68,7 @@ public class GameView extends SurfaceView implements Runnable {
         //initializing drawing objects
         surfaceHolder = getHolder();
         paint = new Paint();
+        background1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
 
     }
 
@@ -76,7 +81,7 @@ public class GameView extends SurfaceView implements Runnable {
             update();
             //to draw the frame
             draw();
-            player.canceljump();
+            //player.canceljump();
             timeThisFrame = System.currentTimeMillis() - startFrameTime;
             if(timeThisFrame >= 1){
                 fps = 1000 / timeThisFrame;
@@ -114,6 +119,9 @@ public class GameView extends SurfaceView implements Runnable {
             canvas = surfaceHolder.lockCanvas();
             canvas.drawColor(Color.WHITE);
 
+            Rect background = new Rect(0,0,getWidth(),getHeight());
+            canvas.drawBitmap(background1,null,background,null);
+
             bitmap = player.getBitmap();
             manageCurrentFrame();
 
@@ -130,7 +138,7 @@ public class GameView extends SurfaceView implements Runnable {
     private void control() {
         //control the frames per seconds drawn
         try {
-            gameThread.sleep(1);
+            gameThread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -206,23 +214,6 @@ public class GameView extends SurfaceView implements Runnable {
                 break;
             }
 
-            case (MotionEvent.ACTION_POINTER_UP):
-            {
-                //System.out.println("ACTION_POINTER_UP");
-                final int pointerIndex = MotionEventCompat.getActionIndex(event);
-                final int pointerId = MotionEventCompat.getPointerId(event,pointerIndex);
-
-                if(pointerId == mActivePointerId)
-                {
-                    //This was our active pointer going up. Choose a new
-                    //active pointer and adjust accordingly.
-
-                    final int newPointerIndex = pointerIndex == 0 ? 1: 0;
-                    mLastTouchX = MotionEventCompat.getX(event, newPointerIndex);
-                    mLastTouchY = MotionEventCompat.getY(event,newPointerIndex);
-                    mActivePointerId = MotionEventCompat.getPointerId(event,newPointerIndex);
-                }
-            }
             case (MotionEvent.ACTION_CANCEL):
             {
                 mActivePointerId = INVALID_POINTER_ID;
@@ -237,17 +228,11 @@ public class GameView extends SurfaceView implements Runnable {
 
                 System.out.println("ACTION_DOWN");
 
-                // System.out.println("x = " + x + "\t" + "y = " + y);
-
                 //Remember where we started (for dragging)
                 mLastTouchX = x;
                 mLastTouchY = y;
                 //Save the ID of this pointer (for dragging)
                 mActivePointerId = MotionEventCompat.getPointerId(event, 0);
-
-                //System.out.println("mActivePointId = " + mActivePointerId);
-
-
                 break;
             }
         }

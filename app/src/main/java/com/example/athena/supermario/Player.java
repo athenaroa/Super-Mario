@@ -32,19 +32,15 @@ public class Player {
         jump = false;
     }
 
-    public void setMarioType(int changeMT){
-        this.marioType = changeMT;
-    }
-
     public int getFrameWidth(){
 
 
         switch(marioType){
             case 1: //normal running mario
-                frameWidth = 260;
+                frameWidth = 150;
                 break;
             case 2: //normal jumping mario
-                frameWidth = 260; //super jumping mario 165
+                frameWidth = 150; //super jumping mario 165
                 break;
             case 3: //SUPER running mario
                 frameWidth = 0; //super jumping mario 165
@@ -61,7 +57,7 @@ public class Player {
 
         switch(whichMario()){
             case 1: //normal running mario
-                frameHeight = 200;
+                frameHeight = 150;
                 break;
             case 2: //normal jumping mario
                 frameHeight = 200; //super jumping mario 220
@@ -83,10 +79,10 @@ public class Player {
     public float getmanYPos(){
         switch(whichMario()){
             case 1: //normal running mario
-                manYPos = (frameHeight * 2) + 100;
+                manYPos = (frameHeight * 5) + 200;
                 break;
             case 2: //normal jumping mario
-                manYPos = (frameHeight * 2) - 100;
+                manYPos = (frameHeight * 5) - 200;
                 break;
             case 3: //SUPER running mario
                 manYPos = 0;

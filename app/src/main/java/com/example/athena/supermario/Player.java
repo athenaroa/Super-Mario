@@ -23,6 +23,7 @@ public class Player {
     private int frameWidth = 190, frameHeight = 240;
 
     private float manXPos, manYPos;
+    private float prevmanXPos, prevmanYPos;
 
 
 
@@ -49,7 +50,8 @@ public class Player {
     public void setRun(int direc){
         //direction = 1: right
         //direction = 2: left
-        this.direction = direc;
+        direction = direc;
+        System.out.print("Direction = " + direction);
         run = true;
     }
 
@@ -125,20 +127,26 @@ public class Player {
         if(run)
         {
             if(direction == 2) {
-                this.manXPos = manXPos - increment;
-                if (manXPos < (frameWidth*2)) {
-                    this.manXPos = frameWidth*2;
+                System.out.println("IT's here!!!!!!!!!!1");
+                prevmanXPos = manXPos;
+                this.manXPos = manXPos - (increment * 3);
+                System.out.println("manXPos = " + manXPos);
+                if (manXPos < 0) {
+                    this.manXPos = 0;
                 }
             }
             else
             {
+                prevmanXPos = manXPos;
                 this.manXPos = manXPos + increment;
                 if (manXPos > (width - (frameWidth * 2))) {
                     this.manXPos = width - (frameWidth * 2);
                 }
             }
-
-
+        }
+        else
+        {
+            manXPos = prevmanXPos;
         }
 
         if(!jump){

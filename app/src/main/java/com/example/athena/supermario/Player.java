@@ -100,12 +100,13 @@ public class Player {
     }
 
     public float getmanYPos(){
+
         switch(whichMario()){
             case 1: //normal running mario
                 manYPos = (frameHeight * 5) + 200;
                 break;
             case 2: //normal jumping mario
-                manYPos = (frameHeight * 5) - 200;
+                //manYPos = (frameHeight * 5) - 200;
                 break;
             case 3: //SUPER running mario
                 manYPos = 0;
@@ -114,6 +115,7 @@ public class Player {
                 manYPos = 0;
                 break;
         }
+
         return manYPos;
     }
 
@@ -125,19 +127,34 @@ public class Player {
                 this.manXPos = width - (frameWidth * 2);
             }
         }
+        if(!jump){
+            this.manXPos = manXPos + increment;
+            if(manXPos > (width - (frameWidth * 2) )){
+                this.manXPos = width - (frameWidth * 2);
+            }
+        }
 
     }
 
-    public void setmanYPos(float increment){
-        this.manXPos = manXPos + increment;
+    public void setmanYPos(float increment, int height){
+        if(jump) {
+            this.manYPos = manYPos - increment;
+        }
+        if(!jump){
+            this.manYPos = manYPos + increment;
+            if(manYPos > ((frameHeight * 5) + 200))
+            {
+                this.manYPos = (frameHeight * 5) + 200;
+            }
+        }
     }
 
     public void jump(){
-        jump = true;
+        this.jump = true;
     }
 
     public void canceljump(){
-        jump = false;
+        this.jump = false;
     }
 
     public int whichMario(){

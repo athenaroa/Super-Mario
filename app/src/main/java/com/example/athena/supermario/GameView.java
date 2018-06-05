@@ -90,6 +90,7 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
         //update the coordinates of our character
         player.setmanXPos(runSpeedPerSecond/fps, getWidth());
+        player.setmanYPos(runSpeedPerSecond/fps, getHeight());
 
     }
 
@@ -195,17 +196,8 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
             case MotionEvent.ACTION_UP: {
-
-                if(move == 1){
-                    player.stopRun();
-                }
-                if(move == -2)
-                {
-                    player.canceljump();
-                }
-
-
-
+                player.stopRun();
+                player.canceljump();
 
 
                 final int pointIndex = MotionEventCompat.getActionIndex(event);

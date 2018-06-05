@@ -9,6 +9,7 @@ public class Player {
     private Bitmap runningMario;
     private Bitmap runningMarioLEFT;
     private Bitmap jumpingMario;
+    private Bitmap jumpingMarioLEFT;
     private Bitmap superjumpingMario;
     private int marioType = 1;
     private int direction;
@@ -38,6 +39,7 @@ public class Player {
         runningMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.normalrunmmario);
         jumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.normaljumpmario);
         runningMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.normalrunmmarioleft);
+        jumpingMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.normaljumpmarioleft);
         superjumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmario);
 
 
@@ -47,6 +49,13 @@ public class Player {
         jump = false;
         run = false;
     }
+
+    public int getDirection(){
+        return direction;
+    }
+
+
+
     public void setRun(int direc){
         //direction = 1: right
         //direction = 2: left
@@ -127,10 +136,10 @@ public class Player {
         if(run)
         {
             if(direction == 2) {
-                System.out.println("IT's here!!!!!!!!!!1");
+                //System.out.println("IT's here!!!!!!!!!!1");
                 prevmanXPos = manXPos;
                 this.manXPos = manXPos - (increment * 3);
-                System.out.println("manXPos = " + manXPos);
+                //System.out.println("manXPos = " + manXPos);
                 if (manXPos < 0) {
                     this.manXPos = 0;
                 }
@@ -144,13 +153,13 @@ public class Player {
                 }
             }
         }
-        else
+        if(run == false)
         {
             manXPos = prevmanXPos;
         }
 
         if(!jump){
-            this.manXPos = manXPos + increment;
+            this.manXPos = manXPos + (increment/2);
             if(manXPos > (width - (frameWidth * 2) )){
                 this.manXPos = width - (frameWidth * 2);
             }
@@ -161,6 +170,10 @@ public class Player {
     public void setmanYPos(float increment, int height){
         if(jump) {
             this.manYPos = manYPos - increment;
+            if(manYPos < frameHeight)
+            {
+                this.manYPos = frameHeight;
+            }
         }
         if(!jump){
             this.manYPos = manYPos + increment;
@@ -198,6 +211,11 @@ public class Player {
         {
             marioType = 1;
             return runningMarioLEFT;
+        }
+        else if (!jump && (direction == 2))
+        {
+            marioType = 2;
+            return jumpingMarioLEFT;
         }
         else
         {

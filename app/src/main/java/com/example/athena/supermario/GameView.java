@@ -32,9 +32,8 @@ public class GameView extends SurfaceView implements Runnable {
     private SurfaceHolder surfaceHolder;
 
 
+    private int motion;
     private float runSpeedPerSecond = 100; //200
-    //private int frameWidth = 190, frameHeight = 240;
-   // private float manXPos = 10, manYPos = (frameHeight * 2) + 100 ;
     private int frameCount = 6;
     private int currentFrame = 0;
     private long fps;
@@ -70,6 +69,8 @@ public class GameView extends SurfaceView implements Runnable {
         paint = new Paint();
         background1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
 
+        motion = 0;
+
     }
 
     @Override
@@ -90,25 +91,38 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
         //update the coordinates of our character
         player.setmanXPos(runSpeedPerSecond/fps, getWidth());
-        player.setmanYPos(runSpeedPerSecond/fps, getHeight());
+        player.setmanYPos((runSpeedPerSecond/fps) * 2, getHeight());
 
     }
 
     public void manageCurrentFrame() {
-        long time = System.currentTimeMillis();
-
-        if (time > lastFrameChange + frameLengthInMillisecond)
+        if(motion == 1)
         {
-            lastFrameChange = time;
             currentFrame++;
-
             if (currentFrame >= frameCount)
             {
-                    currentFrame = 0;
+                currentFrame = 0;
             }
         }
+        else //motion = 0
+        {
+            if((player.getDirection() == 1)){
+                currentFrame = 2;
+            }
+            else if ((player.getDirection() == 2))
+            {
+                currentFrame = 3;
+            }
+            else
+            {
+                currentFrame = 2;
+            }
+
+        }
+
         frameToDraw.left = currentFrame * player.getFrameWidth();
         frameToDraw.right = frameToDraw.left + player.getFrameWidth();
+
     }
     private void draw() {
         //draw the character to the canvas
@@ -135,7 +149,7 @@ public class GameView extends SurfaceView implements Runnable {
     private void control() {
         //control the frames per seconds drawn
         try {
-            gameThread.sleep(10);
+            gameThread.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -150,6 +164,11 @@ public class GameView extends SurfaceView implements Runnable {
 
         switch(action/*event.getAction() & MotionEvent.ACTION_MASK*/){
             case MotionEvent.ACTION_MOVE: {
+
+
+
+
+
                 final int pointerIndex = MotionEventCompat.findPointerIndex(event, mActivePointerId);
                 final float x = MotionEventCompat.getX(event, pointerIndex);
                 final float y = MotionEventCompat.getY(event, pointerIndex);
@@ -179,8 +198,8 @@ public class GameView extends SurfaceView implements Runnable {
 
                 if (move == 1) {
                     System.out.println("L to R");
-                    //resume();
                     player.setRun(1);
+                    motion = 1;
                 } else if (move == -1) {
                     System.out.println("R to L");
                     player.setRun(2);
@@ -197,10 +216,12 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
             case MotionEvent.ACTION_UP: {
+
                 player.stopRun();
                 player.canceljump();
+                motion = 0;
 
-
+                /*
                 final int pointIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointIndex);
                 final float y = MotionEventCompat.getY(event, pointIndex);
@@ -211,15 +232,10 @@ public class GameView extends SurfaceView implements Runnable {
                 mLastTouchY = y;
                 //Save the ID of this pointer (for dragging)
                 mActivePointerId = MotionEventCompat.getPointerId(event, 0);
-
+                */
                 break;
             }
 
-            case (MotionEvent.ACTION_CANCEL):
-            {
-                mActivePointerId = INVALID_POINTER_ID;
-                break;
-            }
             case MotionEvent.ACTION_DOWN: {
                 //player.jump();
                 //resume(); //resume forward

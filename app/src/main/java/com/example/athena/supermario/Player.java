@@ -11,25 +11,48 @@ public class Player {
     private Bitmap superjumpingMario;
     private int marioType = 1;
     private boolean jump;
+    private boolean run;
 
-    //private float runSpeedPerSecond = 200;
+    //Max X coordinate so mario does not go out of screen
+    private int maxX;
+    private int minX;
+
+    //Limit the speed of mario
+    private final int MIN_SPEED = 1;
+    private final int MAX_SPEED = 20;
+
+
     private int frameWidth = 190, frameHeight = 240;
-    private float manXPos = 10, manYPos = (frameHeight * 2) + 100 ;
-   // private int frameCount = 6;
-    //private int currentFrame = 0;
-    //private long fps;
-    //private long timeThisFrame;
-    //private long lastFrameChange = 0;
-    //private int frameLengthInMillisecond = 20;
+
+    private float manXPos, manYPos;
+    private int speed = 0;
+
 
     //constructor
-    public Player(Context context) {
+    public Player(Context context, int screenX, int screenY) {
+
+        manXPos = 10;
+        manYPos = (frameHeight * 5) + 200;
+        speed = 1;
+
         //Getting bitmap from drawable resource
         runningMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.normalrunmmario);
         jumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.normaljumpmario);
         superjumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmario);
 
+
+        maxX = screenX - runningMario.getWidth();
+        minX = 0;
+
         jump = false;
+        run = false;
+    }
+    public void setRun(){
+        run = true;
+    }
+
+    public void stopRun(){
+        run = false;
     }
 
     public int getFrameWidth(){
@@ -95,10 +118,14 @@ public class Player {
     }
 
     public void setmanXPos(float increment, int width){
-         this.manXPos = manXPos + increment;
-        if(manXPos > width ){
-            this.manXPos = 10;
+        if(run)
+        {
+            this.manXPos = manXPos + increment;
+            if(manXPos > (width - (frameWidth * 2) )){
+                this.manXPos = width - (frameWidth * 2);
+            }
         }
+
     }
 
     public void setmanYPos(float increment){

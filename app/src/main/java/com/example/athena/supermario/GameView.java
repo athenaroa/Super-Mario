@@ -59,11 +59,11 @@ public class GameView extends SurfaceView implements Runnable {
     Bitmap background1;
 
     //Class constructor
-    public GameView(Context context) {
+    public GameView(Context context, int screenX, int screenY) {
         super(context);
 
         //initializing player object
-        player = new Player(context);
+        player = new Player(context, screenX,screenY);
 
         //initializing drawing objects
         surfaceHolder = getHolder();
@@ -77,17 +77,13 @@ public class GameView extends SurfaceView implements Runnable {
         while (playing) {
 
             long startFrameTime = System.currentTimeMillis();
-            //to update the frame
             update();
-            //to draw the frame
             draw();
-            //player.canceljump();
+            control();
             timeThisFrame = System.currentTimeMillis() - startFrameTime;
             if(timeThisFrame >= 1){
                 fps = 1000 / timeThisFrame;
             }
-            //to control
-            control();
         }
     }
 
@@ -182,7 +178,8 @@ public class GameView extends SurfaceView implements Runnable {
 
                 if (move == 1) {
                     System.out.println("L to R");
-                    resume();
+                    //resume();
+                    player.setRun();
                 } else if (move == -1) {
                     System.out.println("R to L");
                 } else if (move == 2) {
@@ -199,7 +196,18 @@ public class GameView extends SurfaceView implements Runnable {
 
             case MotionEvent.ACTION_UP: {
 
-                pause();
+                if(move == 1){
+                    player.stopRun();
+                }
+                if(move == -2)
+                {
+                    player.canceljump();
+                }
+
+
+
+
+
                 final int pointIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointIndex);
                 final float y = MotionEventCompat.getY(event, pointIndex);

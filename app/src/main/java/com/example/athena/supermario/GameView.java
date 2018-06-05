@@ -41,9 +41,18 @@ public class GameView extends SurfaceView implements Runnable {
     private long lastFrameChange = 0;
     private int frameLengthInMillisecond = 60;
 
+    private int backPosX;
+
+
     private Rect frameToDraw = new Rect(0, 0, 190, 240);
     private RectF whereToDraw = new RectF(10, 580,
             10 + 190, 240);
+
+    private Rect backFrameToDraw = new Rect(0,0,getWidth(), getHeight());
+
+
+
+
 
 
     private int mActivePointerId = INVALID_POINTER_ID;
@@ -56,6 +65,8 @@ public class GameView extends SurfaceView implements Runnable {
 
     Bitmap bitmap;
     Bitmap background1;
+
+
 
     //Class constructor
     public GameView(Context context, int screenX, int screenY) {
@@ -70,6 +81,7 @@ public class GameView extends SurfaceView implements Runnable {
         background1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
 
         motion = 0;
+        backPosX = 0;
 
     }
 
@@ -93,6 +105,14 @@ public class GameView extends SurfaceView implements Runnable {
         player.setmanXPos(runSpeedPerSecond/fps, getWidth());
         player.setmanYPos((runSpeedPerSecond/fps) * 2, getHeight());
 
+        //update coordinates of the background
+        if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4)) {
+            backPosX += 7;
+        }
+        if(motion == 1 && (player.getmanXPos() < (getWidth()/4)) && (player.getDirection() == 2)) {
+            backPosX -= 7;
+        }
+
     }
 
     public void manageCurrentFrame() {
@@ -104,7 +124,7 @@ public class GameView extends SurfaceView implements Runnable {
                 currentFrame = 0;
             }
         }
-        else //motion = 0
+        else //motion = 0 , no motion
         {
             if((player.getDirection() == 1)){
                 currentFrame = 2;
@@ -119,9 +139,15 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
         }
-
         frameToDraw.left = currentFrame * player.getFrameWidth();
         frameToDraw.right = frameToDraw.left + player.getFrameWidth();
+
+        //backFrameToDraw.left = currentFrame * (getWidth()/6);
+        //backFrameToDraw.right = frameToDraw.left + (getWidth()/6);
+
+
+
+
 
     }
     private void draw() {
@@ -130,7 +156,12 @@ public class GameView extends SurfaceView implements Runnable {
             canvas = surfaceHolder.lockCanvas();
             canvas.drawColor(Color.WHITE);
 
-            Rect background = new Rect(0,0,getWidth(),getHeight());
+
+
+            Rect background = new Rect(0 - backPosX,0,getWidth() - backPosX,getHeight());
+            //Rect backFrameToDraw = new Rect(0,0,getWidth(), getHeight());
+
+
             canvas.drawBitmap(background1,null,background,null);
 
             bitmap = player.getBitmap();
@@ -164,9 +195,6 @@ public class GameView extends SurfaceView implements Runnable {
 
         switch(action/*event.getAction() & MotionEvent.ACTION_MASK*/){
             case MotionEvent.ACTION_MOVE: {
-
-
-
 
 
                 final int pointerIndex = MotionEventCompat.findPointerIndex(event, mActivePointerId);

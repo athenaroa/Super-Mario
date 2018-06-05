@@ -180,9 +180,10 @@ public class GameView extends SurfaceView implements Runnable {
                 if (move == 1) {
                     System.out.println("L to R");
                     //resume();
-                    player.setRun();
+                    player.setRun(1);
                 } else if (move == -1) {
                     System.out.println("R to L");
+                    player.setRun(2);
                 } else if (move == 2) {
                     System.out.println("U to D");
                 } else if(move == -2){

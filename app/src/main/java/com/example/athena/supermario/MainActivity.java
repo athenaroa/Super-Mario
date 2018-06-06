@@ -2,6 +2,8 @@ package com.example.athena.supermario;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //adding a click listener
         buttonPlay.setOnClickListener(this);
+
     }
 
     @Override

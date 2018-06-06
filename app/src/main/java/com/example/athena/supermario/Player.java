@@ -51,8 +51,6 @@ public class Player {
         jump = false;
         run = false;
 
-
-
     }
 
     public int getDirection(){

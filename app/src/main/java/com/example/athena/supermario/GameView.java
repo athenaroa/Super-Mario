@@ -13,62 +13,58 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+
 import static android.view.MotionEvent.INVALID_POINTER_ID;
 
 public class GameView extends SurfaceView implements Runnable {
+
     //boolean variable to track if the game is playing or not
     volatile boolean playing;
 
     //the game thread
     private Thread gameThread = null;
-    //adding the player to this class
+
+
+    //Class objects
     private Player player;
-
-
-
-    //These objects will be used for drawing
-    private Paint paint;
+    private LevelOne levelOne;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
 
 
+    //Background variables
     private int motion;
-    private float runSpeedPerSecond = 100; //200
-    private int frameCount = 6;
-    private int currentFrame = 0;
-
-
-
-    private long fps;
-    private long timeThisFrame;
-    private long lastFrameChange = 0;
-    private int frameLengthInMillisecond = 60;
-
-    private long jumpTimeStart;
-    private long jumpTimeMax;
-
-
     private int backPosX;
 
+    //Mario variables
+    private long jumpTimeStart;
+    private long jumpTimeMax;
+    private float runSpeedPerSecond = 100;
+    private int frameCount = 6;
+    private int currentFrame = 0;
+    private long fps;
+    private long timeThisFrame;
 
     private Rect frameToDraw = new Rect(0, 0, 190, 240);
     private RectF whereToDraw = new RectF(10, 580,
             10 + 190, 240);
 
-
+    //OnTouch event variables
     private int mActivePointerId = INVALID_POINTER_ID;
     private float mLastTouchX;
     private float mLastTouchY;
     public float touchPosX;
     public float touchPosY;
 
+    //Level variabless
+    private int level;
 
 
     Bitmap bitmap;
-    Bitmap background1;
-    Bitmap background1repeatright;
-    Bitmap background1repeatleft;
-
+    Bitmap back;
+    ArrayList<Bitmap> lives;
+    Bitmap heart;
 
 
     //Class constructor
@@ -77,17 +73,19 @@ public class GameView extends SurfaceView implements Runnable {
 
         //initializing player object
         player = new Player(context, screenX,screenY);
+        //initializing levelOne object
+        levelOne = new LevelOne(context, screenX,screenY);
+
+        lives =  new ArrayList<>();
 
         //initializing drawing objects
         surfaceHolder = getHolder();
-        paint = new Paint();
-        background1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
-        background1repeatright = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
-        background1repeatleft = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
 
+
+        //initializing variables
+        level = 1;
         motion = 0;
         backPosX = 0;
-
         jumpTimeStart = 0;
         jumpTimeMax = 200;
 
@@ -109,7 +107,7 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void update() {
-        //update the coordinates of our character
+        //update the coordinates of Mario
         player.setmanXPos(runSpeedPerSecond/fps, getWidth());
         player.setmanYPos((runSpeedPerSecond/fps) * 10, getHeight());
 
@@ -130,12 +128,14 @@ public class GameView extends SurfaceView implements Runnable {
         }
         else{}
 
-
         //Update coordinates of jump
         if((System.currentTimeMillis() - jumpTimeStart) >= jumpTimeMax)
         {
             player.canceljump();
         }
+
+        //Level update();
+
 
     }
 
@@ -168,29 +168,54 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     }
+
+    public void setBackground(){
+        if(level == 1){
+            this.back = levelOne.getbackground();
+        }
+    }
+
+
     private void draw() {
         //draw the character to the canvas
         if(surfaceHolder.getSurface().isValid()){
-            canvas = surfaceHolder.lockCanvas();
-            //canvas.drawColor(Color.WHITE);
 
+            canvas = surfaceHolder.lockCanvas();
+
+            //Drawing the background
             Rect background = new Rect(0 - backPosX,0,getWidth() - backPosX,getHeight());
             Rect backgroundrepeatright = new Rect((getWidth() - backPosX),0,(getWidth() * 2) - backPosX,getHeight());
             Rect backgroundrepeatleft = new Rect((0 - getWidth() - backPosX),0, 0 - backPosX,getHeight());
+            setBackground();
+            canvas.drawBitmap(back,null,background,null);
+            canvas.drawBitmap(back,null,backgroundrepeatright, null);
+            canvas.drawBitmap(back,null,backgroundrepeatleft, null);
 
-
-            canvas.drawBitmap(background1,null,background,null);
-            canvas.drawBitmap(background1repeatright,null,backgroundrepeatright, null);
-            canvas.drawBitmap(background1repeatleft,null,backgroundrepeatleft, null);
-
-            bitmap = player.getBitmap();
-            manageCurrentFrame();
-
+            //Drawing Mario
+            manageCurrentFrame(); //Managing which frame of Mario will be displayed
+            bitmap = player.getBitmap(); //get Mario Bitmap from Player class
             bitmap = Bitmap.createScaledBitmap(bitmap, player.getFrameWidth() * frameCount, player.getFrameHeight(), false);
-
             whereToDraw.set((int) player.getmanXPos(), (int) player.getmanYPos(),
                     (int) player.getmanXPos() + player.getFrameWidth(), player.getmanYPos() + player.getFrameHeight());
             canvas.drawBitmap(player.getBitmap(),frameToDraw,whereToDraw,null);
+
+
+            //Drawing Mario lives and Score
+            Paint paint = new Paint();
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(60);
+            canvas.drawText("Score: " + levelOne.getScore(), getWidth()/2, 60, paint);
+
+
+            lives = levelOne.getLifeArray();
+            for(int i = 0; i < levelOne.getLifeArray().size(); i++)
+            {
+                heart = lives.get(i);
+                Rect life = new Rect( 10 + (heart.getWidth() * i) ,10, heart.getWidth() + (heart.getWidth() * i), heart.getHeight());
+                canvas.drawBitmap(heart,null,life,null);
+
+            }
+
             surfaceHolder.unlockCanvasAndPost(canvas);
 
         }
@@ -266,27 +291,12 @@ public class GameView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_UP: {
 
                 player.stopRun();
-                //player.canceljump();
                 motion = 0;
 
-                /*
-                final int pointIndex = MotionEventCompat.getActionIndex(event);
-                final float x = MotionEventCompat.getX(event, pointIndex);
-                final float y = MotionEventCompat.getY(event, pointIndex);
-
-                System.out.println("ACTION_UP");
-                //Remember where we started (for dragging)
-                mLastTouchX = x;
-                mLastTouchY = y;
-                //Save the ID of this pointer (for dragging)
-                mActivePointerId = MotionEventCompat.getPointerId(event, 0);
-                */
                 break;
             }
 
             case MotionEvent.ACTION_DOWN: {
-                //player.jump();
-                //resume(); //resume forward
                 final int pointIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointIndex);
                 final float y = MotionEventCompat.getY(event, pointIndex);

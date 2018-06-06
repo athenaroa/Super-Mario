@@ -26,15 +26,7 @@ public class GameActivity extends AppCompatActivity{
         gameView = new GameView(this, size.x,size.y);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(gameView);
-       /*
-        rightBtn = findViewById(R.id.jump);
 
-        //adding a click listener
-        rightBtn.setOnClickListener(this);
-
-        //adding it to contentview
-        setContentView(gameView);
-     */
     }
 
 

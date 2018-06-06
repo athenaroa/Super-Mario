@@ -43,6 +43,14 @@ public class LevelOne {
         coinLoc.add(coin1);
 
     }
+    public void updateCoinPos( int move){
+        for(int i = 0; i < coinLoc.size(); i++){
+            Rect newPos = coinLoc.get(i);
+            newPos.set(newPos.left + move, newPos.top,newPos.right + move,newPos.bottom);
+            coinLoc.set(i,newPos);
+        }
+    }
+
 
     public Bitmap getbackground() {
         return background;

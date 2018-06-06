@@ -78,13 +78,13 @@ public class GameView extends SurfaceView implements Runnable {
         //initializing levelOne object
         levelOne = new LevelOne(context, screenX,screenY);
 
+
         lives =  new ArrayList<>();
 
         levelCoins = new ArrayList<>();
 
         //initializing drawing objects
         surfaceHolder = getHolder();
-
 
         //initializing variables
         level = 1;
@@ -119,6 +119,7 @@ public class GameView extends SurfaceView implements Runnable {
         //update coordinates of the background
         if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
             backPosX += 5;
+            levelOne.updateCoinPos(-5);
             if(backPosX > getWidth())
             {
                 backPosX = 0;
@@ -127,6 +128,7 @@ public class GameView extends SurfaceView implements Runnable {
         }
         else if(motion == 1 && (player.getmanXPos() < (getWidth()/4)) && (player.getDirection() == 2)) {
             backPosX -= 5;
+            levelOne.updateCoinPos(5);
             if(backPosX < 0- getWidth())
             {
                 backPosX = 0;
@@ -221,7 +223,6 @@ public class GameView extends SurfaceView implements Runnable {
                 canvas.drawBitmap(heart,null,life,null);
 
             }
-
 
             //Drawing Coins
             levelCoins = levelOne.getCoinLoc();

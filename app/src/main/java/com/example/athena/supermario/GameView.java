@@ -225,12 +225,10 @@ public class GameView extends SurfaceView implements Runnable {
 
             //Drawing Coins
             levelCoins = levelOne.getCoinLoc();
-            //for(int i = 0; i < levelOne.getCoinLoc().size(); i++){
-
-            System.out.println("Top: = " + levelCoins.get(0).top);
+            for(int i = 0; i < levelOne.getCoinLoc().size(); i++){
                 Rect c = new Rect(levelCoins.get(0).left,levelCoins.get(0).top,levelCoins.get(0).right,levelCoins.get(0).bottom);
                 canvas.drawBitmap(levelOne.getCoinBitmap(), null,c, null);
-            //}
+            }
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

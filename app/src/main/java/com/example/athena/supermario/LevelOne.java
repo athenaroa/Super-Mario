@@ -38,16 +38,9 @@ public class LevelOne {
         lifeArray.add(heart);
 
         coinLoc = new ArrayList<>();
-        coin1 = new Rect(screenX/2, 10,
-                (screenX/2) + coin.getCoinWidth(), 10 + coin.getCoinHeight());
-
-        //coin1 = new Rect(10, 10,
-         //       10 +coin.getCoinWidth(), 10 + coin.getCoinHeight());
-
-
+        coin1 = new Rect(screenX/2, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
+                (screenX/2) + coin.getCoinWidth(), screenY - (coin.getCoinHeight()/2));
         coinLoc.add(coin1);
-
-
 
     }
 

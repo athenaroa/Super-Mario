@@ -36,6 +36,9 @@ public class GameView extends SurfaceView implements Runnable {
     private float runSpeedPerSecond = 100; //200
     private int frameCount = 6;
     private int currentFrame = 0;
+
+
+
     private long fps;
     private long timeThisFrame;
     private long lastFrameChange = 0;
@@ -47,10 +50,6 @@ public class GameView extends SurfaceView implements Runnable {
     private Rect frameToDraw = new Rect(0, 0, 190, 240);
     private RectF whereToDraw = new RectF(10, 580,
             10 + 190, 240);
-
-    private Rect backFrameToDraw = new Rect(0,0,getWidth(), getHeight());
-
-
 
 
 
@@ -65,6 +64,8 @@ public class GameView extends SurfaceView implements Runnable {
 
     Bitmap bitmap;
     Bitmap background1;
+    Bitmap background1repeatright;
+    Bitmap background1repeatleft;
 
 
 
@@ -79,6 +80,8 @@ public class GameView extends SurfaceView implements Runnable {
         surfaceHolder = getHolder();
         paint = new Paint();
         background1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
+        background1repeatright = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
+        background1repeatleft = BitmapFactory.decodeResource(context.getResources(),R.drawable.background);
 
         motion = 0;
         backPosX = 0;
@@ -106,12 +109,21 @@ public class GameView extends SurfaceView implements Runnable {
         player.setmanYPos((runSpeedPerSecond/fps) * 2, getHeight());
 
         //update coordinates of the background
-        if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4)) {
-            backPosX += 7;
+        if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
+            backPosX += 5;
+            if(backPosX > getWidth())
+            {
+                backPosX = 0;
+            }
         }
-        if(motion == 1 && (player.getmanXPos() < (getWidth()/4)) && (player.getDirection() == 2)) {
-            backPosX -= 7;
+        else if(motion == 1 && (player.getmanXPos() < (getWidth()/4)) && (player.getDirection() == 2)) {
+            backPosX -= 5;
+            if(backPosX < 0- getWidth())
+            {
+                backPosX = 0;
+            }
         }
+        else{}
 
     }
 
@@ -119,10 +131,12 @@ public class GameView extends SurfaceView implements Runnable {
         if(motion == 1)
         {
             currentFrame++;
+
             if (currentFrame >= frameCount)
             {
                 currentFrame = 0;
             }
+
         }
         else //motion = 0 , no motion
         {
@@ -137,16 +151,9 @@ public class GameView extends SurfaceView implements Runnable {
             {
                 currentFrame = 2;
             }
-
         }
         frameToDraw.left = currentFrame * player.getFrameWidth();
         frameToDraw.right = frameToDraw.left + player.getFrameWidth();
-
-        //backFrameToDraw.left = currentFrame * (getWidth()/6);
-        //backFrameToDraw.right = frameToDraw.left + (getWidth()/6);
-
-
-
 
 
     }
@@ -154,15 +161,16 @@ public class GameView extends SurfaceView implements Runnable {
         //draw the character to the canvas
         if(surfaceHolder.getSurface().isValid()){
             canvas = surfaceHolder.lockCanvas();
-            canvas.drawColor(Color.WHITE);
-
-
+            //canvas.drawColor(Color.WHITE);
 
             Rect background = new Rect(0 - backPosX,0,getWidth() - backPosX,getHeight());
-            //Rect backFrameToDraw = new Rect(0,0,getWidth(), getHeight());
+            Rect backgroundrepeatright = new Rect((getWidth() - backPosX),0,(getWidth() * 2) - backPosX,getHeight());
+            Rect backgroundrepeatleft = new Rect((0 - getWidth() - backPosX),0, 0 - backPosX,getHeight());
 
 
             canvas.drawBitmap(background1,null,background,null);
+            canvas.drawBitmap(background1repeatright,null,backgroundrepeatright, null);
+            canvas.drawBitmap(background1repeatleft,null,backgroundrepeatleft, null);
 
             bitmap = player.getBitmap();
             manageCurrentFrame();

@@ -138,10 +138,10 @@ public class Player {
             if(direction == 2) {
                 //System.out.println("IT's here!!!!!!!!!!1");
                 prevmanXPos = manXPos;
-                this.manXPos = manXPos - (increment * 3);
+                this.manXPos = manXPos - (increment * 2);
                 //System.out.println("manXPos = " + manXPos);
-                if (manXPos < 0) {
-                    this.manXPos = 0;
+                if (manXPos < (frameWidth * 2)) {
+                    this.manXPos = frameWidth * 2;
                 }
             }
             else

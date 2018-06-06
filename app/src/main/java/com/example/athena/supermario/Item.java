@@ -15,4 +15,13 @@ public abstract class Item implements GameItems {
     public int getPoints(SuperMarioVisitor visitor){
         return visitor.visit(this);
     }
+
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }

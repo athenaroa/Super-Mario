@@ -28,6 +28,8 @@ public class Player {
 
 
 
+
+
     //constructor
     public Player(Context context, int screenX, int screenY) {
 
@@ -48,12 +50,14 @@ public class Player {
 
         jump = false;
         run = false;
+
+
+
     }
 
     public int getDirection(){
         return direction;
     }
-
 
 
     public void setRun(int direc){
@@ -153,9 +157,16 @@ public class Player {
                 }
             }
         }
-        if(run == false)
+        if(!run)
         {
             manXPos = prevmanXPos;
+        }
+
+        if(jump){
+            this.manXPos = manXPos + (increment/4);
+            if(manXPos > (width - (frameWidth * 2) )){
+                this.manXPos = width - (frameWidth * 2);
+            }
         }
 
         if(!jump){

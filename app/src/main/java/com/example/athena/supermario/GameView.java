@@ -44,14 +44,16 @@ public class GameView extends SurfaceView implements Runnable {
     private long lastFrameChange = 0;
     private int frameLengthInMillisecond = 60;
 
+    private long jumpTimeStart;
+    private long jumpTimeMax;
+
+
     private int backPosX;
 
 
     private Rect frameToDraw = new Rect(0, 0, 190, 240);
     private RectF whereToDraw = new RectF(10, 580,
             10 + 190, 240);
-
-
 
 
     private int mActivePointerId = INVALID_POINTER_ID;
@@ -86,6 +88,9 @@ public class GameView extends SurfaceView implements Runnable {
         motion = 0;
         backPosX = 0;
 
+        jumpTimeStart = 0;
+        jumpTimeMax = 200;
+
     }
 
     @Override
@@ -106,7 +111,7 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
         //update the coordinates of our character
         player.setmanXPos(runSpeedPerSecond/fps, getWidth());
-        player.setmanYPos((runSpeedPerSecond/fps) * 2, getHeight());
+        player.setmanYPos((runSpeedPerSecond/fps) * 10, getHeight());
 
         //update coordinates of the background
         if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
@@ -125,6 +130,13 @@ public class GameView extends SurfaceView implements Runnable {
         }
         else{}
 
+
+        //Update coordinates of jump
+        if((System.currentTimeMillis() - jumpTimeStart) >= jumpTimeMax)
+        {
+            player.canceljump();
+        }
+
     }
 
     public void manageCurrentFrame() {
@@ -136,7 +148,6 @@ public class GameView extends SurfaceView implements Runnable {
             {
                 currentFrame = 0;
             }
-
         }
         else //motion = 0 , no motion
         {
@@ -244,6 +255,7 @@ public class GameView extends SurfaceView implements Runnable {
                 } else if(move == -2){
                     System.out.println("D to U");
                     player.jump();
+                    jumpTimeStart = System.currentTimeMillis();
                 }
                 else {
                     System.out.println("Error occurred");
@@ -254,7 +266,7 @@ public class GameView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_UP: {
 
                 player.stopRun();
-                player.canceljump();
+                //player.canceljump();
                 motion = 0;
 
                 /*

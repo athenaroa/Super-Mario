@@ -58,7 +58,7 @@ public class GameView extends SurfaceView implements Runnable {
     public float touchPosX;
     public float touchPosY;
 
-    //Level variabless
+    //Level variables
     private int level;
     ArrayList<Rect> levelCoins;
 

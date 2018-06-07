@@ -20,11 +20,14 @@ public class LevelOne {
 
     private ArrayList<Bitmap> lifeArray;
     private ArrayList<Rect> coinLoc;
+    private ArrayList<Rect> blockLoc;
     private int score;
 
     private Coins coin;
+    private Blocks block;
 
     Rect coin1, coin2, coin3,coin4, coin10;
+    Rect block1, block2, block3;
 
 
     public LevelOne(Context context, int screenX, int screenY) {
@@ -36,6 +39,7 @@ public class LevelOne {
         marioRightY = 0;
 
         coin = new Coins(context, screenX, screenY);
+        block = new Blocks(context, screenX, screenY);
 
         background = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         heart = BitmapFactory.decodeResource(context.getResources(), R.drawable.heart);
@@ -49,35 +53,8 @@ public class LevelOne {
         lifeArray.add(heart);
         lifeArray.add(heart);
 
-        coinLoc = new ArrayList<>();
-
-
-        //Frame 0
-        coin3 = new Rect((screenX/2) -screenX, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
-                ((screenX/2) + coin.getCoinWidth()) - screenX , screenY - (coin.getCoinHeight()/2));
-
-        coinLoc.add(coin3);
-
-        //Frame 1
-        coin1 = new Rect(screenX/2, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
-                (screenX/2) + coin.getCoinWidth(), screenY - (coin.getCoinHeight()/2));
-        coin2 = new Rect(screenX/2 + 100, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
-                (screenX/2) + coin.getCoinWidth() + 100, screenY - (coin.getCoinHeight()/2));
-        coin4 = new Rect( (screenX/2) - 100, (screenY/2),
-                (screenX/2) + coin.getCoinWidth() - 100, (screenY/2) +  (coin.getCoinHeight()));
-
-        coinLoc.add(coin1);
-        coinLoc.add(coin2);
-        coinLoc.add(coin4);
-
-
-        //Frame 2
-        coin10 = new Rect((screenX/2) * 2, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
-                ((screenX/2) * 2) + coin.getCoinWidth(), screenY - (coin.getCoinHeight()/2));
-        coinLoc.add(coin10);
-
-
-
+        coinLoc = coin.levelOneCoinLoc(screenX,screenY);
+        blockLoc =  new ArrayList<>();
     }
 
     public void updateCoinPos( int move){

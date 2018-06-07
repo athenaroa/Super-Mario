@@ -25,7 +25,7 @@ public class LevelOne {
 
     private Coins coin;
 
-    Rect coin1, coin2, coin3;
+    Rect coin1, coin2, coin3,coin4, coin10;
 
 
     public LevelOne(Context context, int screenX, int screenY) {
@@ -47,19 +47,32 @@ public class LevelOne {
 
         coinLoc = new ArrayList<>();
 
+
+        //Frame 0
+        coin3 = new Rect((screenX/2) -screenX, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
+                ((screenX/2) + coin.getCoinWidth()) - screenX , screenY - (coin.getCoinHeight()/2));
+
+        coinLoc.add(coin3);
+
         //Frame 1
         coin1 = new Rect(screenX/2, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
                 (screenX/2) + coin.getCoinWidth(), screenY - (coin.getCoinHeight()/2));
         coin2 = new Rect(screenX/2 + 100, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
                 (screenX/2) + coin.getCoinWidth() + 100, screenY - (coin.getCoinHeight()/2));
+        coin4 = new Rect( (screenX/2) - 100, (screenY/2),
+                (screenX/2) + coin.getCoinWidth() - 100, (screenY/2) +  (coin.getCoinHeight()));
+
         coinLoc.add(coin1);
         coinLoc.add(coin2);
+        coinLoc.add(coin4);
+
+
 
 
         //Frame 2
-        coin3 = new Rect((screenX/2) * 2, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
+        coin10 = new Rect((screenX/2) * 2, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
                 ((screenX/2) * 2) + coin.getCoinWidth(), screenY - (coin.getCoinHeight()/2));
-        coinLoc.add(coin3);
+        coinLoc.add(coin10);
 
 
         marioLeftX = 0;
@@ -129,16 +142,8 @@ public class LevelOne {
         {
             //Mario going forward into coin
             Rect coin = coinLoc.get(i);
-
-            System.out.println("Coin number: " + i);
-            System.out.println("marioLeftX = " + marioLeftX);
-            System.out.println("marioRightX = " + marioRightX);
-            System.out.println("Coin.left = " + coin.left);
-            System.out.println("Coin.right = " + coin.right);
-
-
-
-            if(marioRightX > coin.left)
+            if(((marioRightX >= coin.left) && marioLeftX <= coin.right)
+                    && ((marioLeftY <= coin.bottom) && (marioRightY >= coin.top )))
             {
                 coinLoc.remove(i);
             }

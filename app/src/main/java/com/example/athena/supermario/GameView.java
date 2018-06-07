@@ -92,7 +92,7 @@ public class GameView extends SurfaceView implements Runnable {
         motion = 0;
         backPosX = 0;
         jumpTimeStart = 0;
-        jumpTimeMax = 200;
+        jumpTimeMax = 500;
         backFrame = 1;
 
     }

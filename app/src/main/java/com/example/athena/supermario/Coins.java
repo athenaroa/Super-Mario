@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class Coins extends Item {
+public class Coins {
 
     Bitmap coin;
     private int coinWidth;
@@ -27,14 +27,8 @@ public class Coins extends Item {
         return coinHeight;
     }
 
-    @Override
     public int getValue() {
         return coinValue;
-    }
-
-    @Override
-    public int getPoints(SuperMarioVisitor visitor) {
-        return super.getPoints(visitor);
     }
 
     public Bitmap getCoinBitmap() {

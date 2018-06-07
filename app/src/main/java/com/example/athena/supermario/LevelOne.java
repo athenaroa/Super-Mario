@@ -18,7 +18,6 @@ public class LevelOne {
 
     private int screenWidth, screenHeight;
 
-   // private PointsAggregator pointsAggregator;
     private ArrayList<Bitmap> lifeArray;
     private ArrayList<Rect> coinLoc;
     private int score;
@@ -30,8 +29,12 @@ public class LevelOne {
 
     public LevelOne(Context context, int screenX, int screenY) {
 
-        //pointsAggregator = new PointsAggregator();
         score = 0;
+        marioLeftX = 0;
+        marioLeftY = 0;
+        marioRightX = 0;
+        marioRightY = 0;
+
         coin = new Coins(context, screenX, screenY);
 
         background = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
@@ -72,14 +75,6 @@ public class LevelOne {
         coin10 = new Rect((screenX/2) * 2, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
                 ((screenX/2) * 2) + coin.getCoinWidth(), screenY - (coin.getCoinHeight()/2));
         coinLoc.add(coin10);
-
-
-        marioLeftX = 0;
-        marioLeftY = 0;
-        marioRightX = 0;
-        marioRightY = 0;
-
-
 
 
 

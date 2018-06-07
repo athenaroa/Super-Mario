@@ -18,10 +18,10 @@ public class LevelOne {
 
     private int screenWidth, screenHeight;
 
-
-    private PointsAggregator pointsAggregator;
+   // private PointsAggregator pointsAggregator;
     private ArrayList<Bitmap> lifeArray;
     private ArrayList<Rect> coinLoc;
+    private int score;
 
     private Coins coin;
 
@@ -30,7 +30,8 @@ public class LevelOne {
 
     public LevelOne(Context context, int screenX, int screenY) {
 
-        pointsAggregator = new PointsAggregator();
+        //pointsAggregator = new PointsAggregator();
+        score = 0;
         coin = new Coins(context, screenX, screenY);
 
         background = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
@@ -67,8 +68,6 @@ public class LevelOne {
         coinLoc.add(coin4);
 
 
-
-
         //Frame 2
         coin10 = new Rect((screenX/2) * 2, screenY - (coin.getCoinHeight() + coin.getCoinHeight()/2),
                 ((screenX/2) * 2) + coin.getCoinWidth(), screenY - (coin.getCoinHeight()/2));
@@ -85,6 +84,7 @@ public class LevelOne {
 
 
     }
+
     public void updateCoinPos( int move){
         for(int i = 0; i < coinLoc.size(); i++){
             Rect newPos = coinLoc.get(i);
@@ -102,7 +102,7 @@ public class LevelOne {
     }
 
     public int getScore() {
-        return pointsAggregator.getCurrScore();
+        return this.score;
     }
 
     public ArrayList<Bitmap> getLifeArray() {
@@ -132,25 +132,19 @@ public class LevelOne {
     }
 
     public void marioHitItem(){
-        //returns 0 if none
-        //returns 1 if coin
-        //returns 2 if super mushroom
-        //returns 3 if fire flower
 
-        //Checking if it hit coins
+        //Removing collected coins
         for(int i = 0; i < coinLoc.size(); i++)
         {
-            //Mario going forward into coin
-            Rect coin = coinLoc.get(i);
-            if(((marioRightX >= coin.left) && marioLeftX <= coin.right)
-                    && ((marioLeftY <= coin.bottom) && (marioRightY >= coin.top )))
+            Rect c = coinLoc.get(i);
+            if(((marioRightX >= c.left) && marioLeftX <= c.right)
+                    && ((marioLeftY <= c.bottom) && (marioRightY >= c.top )))
             {
                 coinLoc.remove(i);
+                score += coin.getValue();
+
             }
-
-
         }
-        //return 0;
     }
 
 

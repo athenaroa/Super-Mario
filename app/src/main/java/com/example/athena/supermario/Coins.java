@@ -9,12 +9,14 @@ public class Coins extends Item {
     Bitmap coin;
     private int coinWidth;
     private int coinHeight;
+    private final int coinValue = 200;
 
 
     public Coins(Context context, int screenX, int screenY){
         coin = BitmapFactory.decodeResource(context.getResources(),R.drawable.coin);
         coinWidth = coin.getWidth();
         coinHeight = coin.getHeight();
+
     }
 
     public int getCoinWidth() {
@@ -27,7 +29,7 @@ public class Coins extends Item {
 
     @Override
     public int getValue() {
-        return super.getValue();
+        return coinValue;
     }
 
     @Override

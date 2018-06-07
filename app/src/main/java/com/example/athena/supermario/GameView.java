@@ -60,13 +60,14 @@ public class GameView extends SurfaceView implements Runnable {
 
     //Level variabless
     private int level;
+    ArrayList<Rect> levelCoins;
+
 
 
     Bitmap bitmap;
     Bitmap back;
     ArrayList<Bitmap> lives;
     Bitmap heart;
-    ArrayList<Rect> levelCoins;
 
 
     //Class constructor
@@ -120,6 +121,7 @@ public class GameView extends SurfaceView implements Runnable {
         if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
             backPosX += 5;
             levelOne.updateCoinPos(-5);
+
             if(backPosX > getWidth())
             {
                 backPosX = 0;
@@ -144,6 +146,7 @@ public class GameView extends SurfaceView implements Runnable {
         }
 
         //Level update();
+        levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
 
 
     }
@@ -184,6 +187,10 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    public int getBackFrame(){
+        return backFrame;
+    }
+
 
     private void draw() {
         //draw the character to the canvas
@@ -199,6 +206,7 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawBitmap(back,null,background,null);
             canvas.drawBitmap(back,null,backgroundrepeatright, null);
             canvas.drawBitmap(back,null,backgroundrepeatleft, null);
+
 
             //Drawing Mario
             manageCurrentFrame(); //Managing which frame of Mario will be displayed
@@ -224,11 +232,12 @@ public class GameView extends SurfaceView implements Runnable {
 
             }
 
+
             //Drawing Coins
             levelCoins = levelOne.getCoinLoc();
             for(int i = 0; i < levelOne.getCoinLoc().size(); i++){
-                Rect c = new Rect(levelCoins.get(0).left,levelCoins.get(0).top,levelCoins.get(0).right,levelCoins.get(0).bottom);
-                canvas.drawBitmap(levelOne.getCoinBitmap(), null,c, null);
+                Rect c = new Rect(levelCoins.get(i).left ,levelCoins.get(i).top,levelCoins.get(i).right ,levelCoins.get(i).bottom);
+                canvas.drawBitmap(levelOne.getCoinBitmap(), null, c, null);
             }
 
             surfaceHolder.unlockCanvasAndPost(canvas);

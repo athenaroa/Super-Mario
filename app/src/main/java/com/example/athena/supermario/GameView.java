@@ -116,14 +116,24 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void update() {
         //update the coordinates of Mario
-        player.setmanXPos(runSpeedPerSecond/fps, getWidth());
-        player.setmanYPos((runSpeedPerSecond/fps) * 10, getHeight());
+        if(levelOne.marioHitBlock()){
+            player.setmanXPos(0, getWidth());
+            player.setmanYPos(0, getHeight());
+        }
+        else {
+            player.setmanXPos(runSpeedPerSecond / fps, getWidth());
+            player.setmanYPos((runSpeedPerSecond / fps) * 10, getHeight());
+        }
+        //Update the coordinates of Mario if
+
 
         //update coordinates of the background
         if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
             backPosX += 5;
             levelOne.updateCoinPos(-5);
             levelOne.updateBlockPos(-5);
+
+
 
             if(backPosX > getWidth())
             {
@@ -250,6 +260,11 @@ public class GameView extends SurfaceView implements Runnable {
                 Rect c = new Rect(levelBlocks.get(i).left ,levelBlocks.get(i).top,levelBlocks.get(i).right ,levelBlocks.get(i).bottom);
                 canvas.drawBitmap(levelOne.getBlockBitmap(), null, c, null);
             }
+
+
+
+
+
 
 
             surfaceHolder.unlockCanvasAndPost(canvas);

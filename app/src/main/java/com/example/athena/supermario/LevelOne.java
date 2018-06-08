@@ -112,11 +112,11 @@ public class LevelOne {
     public void update(float marioXPos, float marioYPos, int marioWidth, int marioHeight, int backFrame){
         updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight);
         this.backFrame = backFrame;
-        marioHitItem();
+        marioHitCoin();
 
     }
 
-    public void marioHitItem(){
+    public void marioHitCoin(){
 
         //Removing collected coins
         for(int i = 0; i < coinLoc.size(); i++)
@@ -130,6 +130,22 @@ public class LevelOne {
 
             }
         }
+    }
+
+
+    public boolean marioHitBlock(){
+        boolean output = false;
+
+        for(int i = 0; i < blockLoc.size(); i++)
+        {
+            Rect b = blockLoc.get(i);
+            if(((marioRightX >= b.left) && marioLeftX <= b.right)
+                    && ((marioLeftY <= b.bottom) && (marioRightY >= b.top )))
+            {
+                output = true;
+            }
+        }
+        return output;
     }
 
 

@@ -39,8 +39,8 @@ public class Blocks {
     public ArrayList<Rect> levelOneBlockLoc (int screenX, int screenY){
         Rect block1, block2, block3;
 
-        block1 = new Rect(screenX/2, screenY/2,
-                (screenX/2) + blockWidth, (screenY/2) + blockHeight);
+        block1 = new Rect(screenX/2, (screenY/2) + 200,
+                (screenX/2) + blockWidth, (screenY/2) + blockHeight + 200);
         blockLoc.add(block1);
 
         return blockLoc;

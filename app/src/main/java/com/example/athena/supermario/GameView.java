@@ -94,7 +94,7 @@ public class GameView extends SurfaceView implements Runnable {
         motion = 0;
         backPosX = 0;
         jumpTimeStart = 0;
-        jumpTimeMax = 500;
+        jumpTimeMax = 1000;
         backFrame = 1;
 
     }
@@ -116,13 +116,13 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void update() {
         //update the coordinates of Mario
-        if(levelOne.marioHitBlock()){
-            player.setmanXPos(0, getWidth());
-            player.setmanYPos(0, getHeight());
+        if(levelOne.marioHitBlock(player.getFrameHeight())){
+            player.setmanXPos(0 - 10, getWidth());
+            player.setmanYPos( 0, 1, levelOne.getHitBlockLoc(), levelOne.getBlockHeight());
         }
         else {
             player.setmanXPos(runSpeedPerSecond / fps, getWidth());
-            player.setmanYPos((runSpeedPerSecond / fps) * 10, getHeight());
+            player.setmanYPos((runSpeedPerSecond / fps) * 10, 0, 0,0);
         }
         //Update the coordinates of Mario if
 
@@ -154,11 +154,12 @@ public class GameView extends SurfaceView implements Runnable {
         else{}
 
         //Update coordinates of jump
+        /*
         if((System.currentTimeMillis() - jumpTimeStart) >= jumpTimeMax)
         {
             player.canceljump();
         }
-
+        */
         //Level update();
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
 
@@ -341,7 +342,9 @@ public class GameView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_UP: {
 
                 player.stopRun();
+                player.canceljump();
                 motion = 0;
+
 
                 break;
             }

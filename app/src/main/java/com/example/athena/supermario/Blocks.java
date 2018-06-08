@@ -41,7 +41,10 @@ public class Blocks {
 
         block1 = new Rect(screenX/2, (screenY/2) + 200,
                 (screenX/2) + blockWidth, (screenY/2) + blockHeight + 200);
+        block2 = new Rect(screenX/2 + 500, (screenY - blockHeight - 50),
+                (screenX/2) + blockWidth  + 500, screenY - 50);
         blockLoc.add(block1);
+        blockLoc.add(block2);
 
         return blockLoc;
     }

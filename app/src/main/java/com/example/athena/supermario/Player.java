@@ -155,38 +155,62 @@ public class Player {
                 }
             }
         }
-        if(!run)
+        else if(!run)
         {
             manXPos = prevmanXPos;
         }
 
-        if(jump){
-            this.manXPos = manXPos + (increment/4);
-            if(manXPos > (width - (frameWidth * 2) )){
-                this.manXPos = width - (frameWidth * 2);
-            }
-        }
 
-        if(!jump){
+        if(jump){
             this.manXPos = manXPos + (increment/2);
             if(manXPos > (width - (frameWidth * 2) )){
                 this.manXPos = width - (frameWidth * 2);
             }
         }
+        else if(!jump){
+            this.manXPos = manXPos + (increment);
+            if(manXPos > (width - (frameWidth * 2) )){
+                this.manXPos = width - (frameWidth * 2);
+            }
+        }
+        else {}
+
 
     }
 
-    public void setmanYPos(float increment, int height){
-        if(jump) {
-            this.manYPos = manYPos - increment;
-            if(manYPos < frameHeight)
+    public void setmanYPos(float increment, int hit, int blockLoc, int blockHeight){
+        prevmanYPos = manYPos;
+        if(jump && hit == 0) {
+            System.out.println("JUMP IS TRUEEEEEEEE");
+            this.manYPos = prevmanYPos - increment;
+            if(prevmanYPos < frameHeight)
             {
                 this.manYPos = frameHeight;
             }
         }
-        if(!jump){
-            this.manYPos = manYPos + increment;
-            if(manYPos > ((frameHeight * 5) + 200))
+        else if (jump && hit == 1)
+        {
+
+        }
+        else if (!jump && (hit == 1))
+        {
+            System.out.println("NOT JUMP AND HIT");
+            System.out.println("prevmanYPos = " + prevmanYPos);
+            System.out.println("blockLoc = " + blockLoc);
+            this.manYPos =  prevmanYPos + increment;
+
+            //Mario on top of the block
+            if((prevmanYPos < blockLoc + blockHeight) && (prevmanYPos > blockLoc)) //if mario is above the block after releasing jump
+            {
+                System.out.println("Goes into if Statement");
+                this.manYPos = blockLoc;
+            }
+
+        }
+        else{ //!jump and hit == 0
+            System.out.println("NOT JUMP AND NOT HIT");
+            this.manYPos = prevmanYPos  + increment/10;
+            if(prevmanYPos > ((frameHeight * 5) + 200))
             {
                 this.manYPos = (frameHeight * 5) + 200;
             }

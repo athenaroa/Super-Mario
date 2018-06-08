@@ -190,7 +190,7 @@ public class LevelOne {
             }
 
             //Mario hits top of block
-            if((marioLeftX <= b.right + 50) && (marioRightX >= b.left - 50) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
+            if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
             {
                 output = true;
                 marioNewYPos = b.top;

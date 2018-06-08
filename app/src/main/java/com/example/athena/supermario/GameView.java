@@ -120,7 +120,8 @@ public class GameView extends SurfaceView implements Runnable {
 
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
         if(levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight())){
-            player.setmanXPos(0 - 10, getWidth());
+            player.canceljump();
+            player.setmanXPos(-10, getWidth());
             player.setmanYPos( 0, 1, levelOne.getHitBlockLoc(), levelOne.getBlockHeight());
         }
         else
@@ -292,6 +293,9 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -353,7 +357,7 @@ public class GameView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_UP: {
 
                 player.stopRun();
-                player.canceljump();
+                //player.canceljump();
                 motion = 0;
 
 

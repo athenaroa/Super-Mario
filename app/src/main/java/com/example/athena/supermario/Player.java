@@ -135,8 +135,9 @@ public class Player {
     }
 
     public void setmanXPos(float increment, int width){
-        if(run)
+        if(run && !jump)
         {
+            System.out.println("Run and NOT jump");
             if(direction == 2) {
                 //System.out.println("IT's here!!!!!!!!!!1");
                 prevmanXPos = manXPos;
@@ -155,33 +156,60 @@ public class Player {
                 }
             }
         }
-        else if(!run)
-        {
-            manXPos = prevmanXPos;
-        }
-
-
-        if(jump){
-            this.manXPos = manXPos + (increment/2);
+        else if(jump && !run){
+            System.out.println("Jump and NOT run");
+            this.manXPos = manXPos + 1;
+            //this.manXPos = manXPos + (increment/2);
             if(manXPos > (width - (frameWidth * 2) )){
                 this.manXPos = width - (frameWidth * 2);
             }
         }
-        else if(!jump){
+        else if(!run && !jump)
+        {
+            System.out.println("NOT run and NOT jump");
+            manXPos = prevmanXPos;
+        }
+        else {
+            System.out.println("Else");
             this.manXPos = manXPos + (increment);
             if(manXPos > (width - (frameWidth * 2) )){
                 this.manXPos = width - (frameWidth * 2);
             }
         }
-        else {}
 
 
     }
 
     public void setmanYPos(float increment, int hit, float newYPos, int blockHeight){
         prevmanYPos = manYPos;
+
+        if(run && !jump)
+        {
+            this.manYPos = prevmanYPos;
+        }
+        else if (jump && !run)
+        {
+            if(hit == 1){
+                this.manYPos = newYPos;
+            }
+            else{
+                this.manYPos = prevmanYPos - increment;
+                if(prevmanYPos < frameHeight)
+                {
+                    this.manYPos = frameHeight;
+                    jump = false;
+                }
+            }
+        }
+        else if (!run && !jump){
+            this.manYPos = prevmanYPos;
+        }
+
+
+        /*
+
         if(jump && hit == 0) {
-            System.out.println("JUMP IS TRUEEEEEEEE");
+            //System.out.println("JUMP IS TRUEEEEEEEE");
             this.manYPos = prevmanYPos - increment;
             if(prevmanYPos < frameHeight)
             {
@@ -190,25 +218,26 @@ public class Player {
         }
         else if (jump && hit == 1)
         {
-            System.out.println("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+            //System.out.println("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
             this.manYPos = newYPos;
         }
         else if (!jump && (hit == 1))
         {
-            System.out.println("TEST22222222222222222222222222222");
+           // System.out.println("TEST22222222222222222222222222222");
             this.manYPos =  newYPos;
         }
         else{ //!jump and hit == 0
 
-            System.out.println("NOT JUMP AND NOT HIT");
+            //System.out.println("NOT JUMP AND NOT HIT");
             this.manYPos = prevmanYPos  + increment/10;
             /*
             if(prevmanYPos > ((frameHeight * 5) + 200))
             {
                 this.manYPos = (frameHeight * 5) + 200;
             }
-            */
+
         }
+        */
     }
 
     public void jump(){

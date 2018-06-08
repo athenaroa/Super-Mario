@@ -26,9 +26,6 @@ public class LevelOne {
     private Coins coin;
     private Blocks block;
 
-    Rect coin1, coin2, coin3,coin4, coin10;
-    Rect block1, block2, block3;
-
 
     public LevelOne(Context context, int screenX, int screenY) {
 
@@ -54,7 +51,7 @@ public class LevelOne {
         lifeArray.add(heart);
 
         coinLoc = coin.levelOneCoinLoc(screenX,screenY);
-        blockLoc =  new ArrayList<>();
+        blockLoc =  block.levelOneBlockLoc(screenX,screenY);
     }
 
     public void updateCoinPos( int move){
@@ -62,6 +59,14 @@ public class LevelOne {
             Rect newPos = coinLoc.get(i);
             newPos.set(newPos.left + move, newPos.top,newPos.right + move,newPos.bottom);
             coinLoc.set(i,newPos);
+        }
+    }
+
+    public void updateBlockPos( int move){
+        for(int i = 0; i < blockLoc.size(); i++){
+            Rect newPos = blockLoc.get(i);
+            newPos.set(newPos.left + move, newPos.top,newPos.right + move,newPos.bottom);
+            blockLoc.set(i,newPos);
         }
     }
 
@@ -85,8 +90,16 @@ public class LevelOne {
         return coinLoc;
     }
 
+    public ArrayList<Rect> getBlockLoc() {
+        return blockLoc;
+    }
+
     public Bitmap getCoinBitmap(){
         return coin.getCoinBitmap();
+    }
+
+    public Bitmap getBlockBitmap(){
+        return block.getBlockBitmap();
     }
 
     public void updateMarioVar(float marioXPos, float marioYPos, int marioWidth, int marioHeight){

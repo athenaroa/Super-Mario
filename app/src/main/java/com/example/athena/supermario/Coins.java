@@ -16,8 +16,6 @@ public class Coins {
 
     private ArrayList<Rect> coinLoc;
 
-
-
     public Coins(Context context, int screenX, int screenY){
         coin = BitmapFactory.decodeResource(context.getResources(),R.drawable.coin);
         coinWidth = coin.getWidth();

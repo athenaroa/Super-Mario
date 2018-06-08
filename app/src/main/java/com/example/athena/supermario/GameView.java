@@ -61,6 +61,7 @@ public class GameView extends SurfaceView implements Runnable {
     //Level variables
     private int level;
     ArrayList<Rect> levelCoins;
+    ArrayList<Rect> levelBlocks;
 
 
 
@@ -83,6 +84,7 @@ public class GameView extends SurfaceView implements Runnable {
         lives =  new ArrayList<>();
 
         levelCoins = new ArrayList<>();
+        levelBlocks = new ArrayList<>();
 
         //initializing drawing objects
         surfaceHolder = getHolder();
@@ -121,6 +123,7 @@ public class GameView extends SurfaceView implements Runnable {
         if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
             backPosX += 5;
             levelOne.updateCoinPos(-5);
+            levelOne.updateBlockPos(-5);
 
             if(backPosX > getWidth())
             {
@@ -131,6 +134,7 @@ public class GameView extends SurfaceView implements Runnable {
         else if(motion == 1 && (player.getmanXPos() < (getWidth()/4)) && (player.getDirection() == 2)) {
             backPosX -= 5;
             levelOne.updateCoinPos(5);
+            levelOne.updateBlockPos(5);
             if(backPosX < 0- getWidth())
             {
                 backPosX = 0;
@@ -239,6 +243,14 @@ public class GameView extends SurfaceView implements Runnable {
                 Rect c = new Rect(levelCoins.get(i).left ,levelCoins.get(i).top,levelCoins.get(i).right ,levelCoins.get(i).bottom);
                 canvas.drawBitmap(levelOne.getCoinBitmap(), null, c, null);
             }
+
+            //Drawing Blocks
+            levelBlocks = levelOne.getBlockLoc();
+            for(int i = 0; i < levelOne.getBlockLoc().size(); i++){
+                Rect c = new Rect(levelBlocks.get(i).left ,levelBlocks.get(i).top,levelBlocks.get(i).right ,levelBlocks.get(i).bottom);
+                canvas.drawBitmap(levelOne.getBlockBitmap(), null, c, null);
+            }
+
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

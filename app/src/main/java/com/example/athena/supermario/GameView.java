@@ -82,7 +82,6 @@ public class GameView extends SurfaceView implements Runnable {
 
 
         lives =  new ArrayList<>();
-
         levelCoins = new ArrayList<>();
         levelBlocks = new ArrayList<>();
 
@@ -121,22 +120,14 @@ public class GameView extends SurfaceView implements Runnable {
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
         if(levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight())){
             player.canceljump();
-            player.setmanXPos(-10, getWidth());
+            player.setmanXPos(-10,1 ,getWidth());
             player.setmanYPos( 0, 1, levelOne.getHitBlockLoc(), levelOne.getBlockHeight());
         }
         else
         {
-            player.setmanXPos(runSpeedPerSecond / fps, getWidth());
+            player.setmanXPos(runSpeedPerSecond / fps, 0, getWidth());
             player.setmanYPos((runSpeedPerSecond / fps) * 10, 0, 0,0);
         }
-        /*
-        else {
-            player.setmanXPos(runSpeedPerSecond / fps, getWidth());
-            player.setmanYPos((runSpeedPerSecond / fps) * 10, 0, 0,0);
-        }
-        */
-
-
 
 
         //update coordinates of the background
@@ -164,17 +155,6 @@ public class GameView extends SurfaceView implements Runnable {
             }
         }
         else{}
-
-        //Update coordinates of jump
-        /*
-        if((System.currentTimeMillis() - jumpTimeStart) >= jumpTimeMax)
-        {
-            player.canceljump();
-        }
-        */
-        //Level update();
-        //levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
-
 
     }
 
@@ -273,12 +253,6 @@ public class GameView extends SurfaceView implements Runnable {
                 Rect c = new Rect(levelBlocks.get(i).left ,levelBlocks.get(i).top,levelBlocks.get(i).right ,levelBlocks.get(i).bottom);
                 canvas.drawBitmap(levelOne.getBlockBitmap(), null, c, null);
             }
-
-
-
-
-
-
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

@@ -134,10 +134,10 @@ public class Player {
         return manYPos;
     }
 
-    public void setmanXPos(float increment, int width){
-        if(run && !jump)
+    public void setmanXPos(float increment,int hit, int width){
+        if(run && !jump && (hit == 0))
         {
-            System.out.println("Run and NOT jump");
+            System.out.println("Run and NOT jump and NOT hit");
             if(direction == 2) {
                 //System.out.println("IT's here!!!!!!!!!!1");
                 prevmanXPos = manXPos;
@@ -156,18 +156,25 @@ public class Player {
                 }
             }
         }
-        else if(jump && !run){
-            System.out.println("Jump and NOT run");
+        else if(run && !jump && (hit == 1)){
+            this.manXPos = prevmanXPos;
+        }
+
+        else if(!run && jump && (hit == 0 )){
+            System.out.println("NOT run and jump and NOT hit");
             this.manXPos = manXPos + 1;
             //this.manXPos = manXPos + (increment/2);
             if(manXPos > (width - (frameWidth * 2) )){
                 this.manXPos = width - (frameWidth * 2);
             }
         }
-        else if(!run && !jump)
+        if(!run && !jump && (hit == 1))
         {
-            System.out.println("NOT run and NOT jump");
+            System.out.println("NOT Run and NOT jump and hit");
             manXPos = prevmanXPos;
+        }
+        else if (!run && !jump && hit == 0){
+            this.manXPos = prevmanXPos;
         }
         else {
             System.out.println("Else");
@@ -176,24 +183,22 @@ public class Player {
                 this.manXPos = width - (frameWidth * 2);
             }
         }
-
-
     }
 
     public void setmanYPos(float increment, int hit, float newYPos, int blockHeight){
         prevmanYPos = manYPos;
 
-        if(run && !jump)
+        if((run && !jump && (hit == 0)) ||(run && !jump && (hit == 1)) )
         {
             this.manYPos = prevmanYPos;
         }
-        else if (jump && !run)
+        else if (!run && jump)
         {
             if(hit == 1){
                 this.manYPos = newYPos;
             }
             else{
-                this.manYPos = prevmanYPos - increment;
+                this.manYPos = prevmanYPos - increment/2;
                 if(prevmanYPos < frameHeight)
                 {
                     this.manYPos = frameHeight;
@@ -201,8 +206,12 @@ public class Player {
                 }
             }
         }
-        else if (!run && !jump){
-            this.manYPos = prevmanYPos;
+        else if ((!run && !jump && (hit == 0))){
+            this.manYPos = prevmanYPos  + increment/10;
+            if(prevmanYPos > ((frameHeight * 5) + 200))
+            {
+                this.manYPos = (frameHeight * 5) + 200;
+            }
         }
 
 

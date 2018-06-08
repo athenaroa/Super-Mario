@@ -25,7 +25,7 @@ public class LevelOne {
 
     private Coins coin;
     private Blocks block;
-    private int hitBlockLoc;
+    private float marioNewYPos;
 
 
     public LevelOne(Context context, int screenX, int screenY) {
@@ -35,7 +35,7 @@ public class LevelOne {
         marioLeftY = 0;
         marioRightX = 0;
         marioRightY = 0;
-        hitBlockLoc = 0;
+        marioNewYPos = 0;
 
         coin = new Coins(context, screenX, screenY);
         block = new Blocks(context, screenX, screenY);
@@ -115,7 +115,7 @@ public class LevelOne {
         updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight);
         this.backFrame = backFrame;
         marioHitCoin();
-
+        updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight);
     }
 
     public void marioHitCoin(){
@@ -125,14 +125,6 @@ public class LevelOne {
         {
             Rect c = coinLoc.get(i);
 
-            /*
-            if(((marioRightX >= c.left) && marioLeftX <= c.right)
-                    && ((marioLeftY <= c.bottom) && (marioRightY >= c.top )))
-            {
-                coinLoc.remove(i);
-                score += coin.getValue();
-
-            }*/
             //Mario hits left of coin
             if((marioRightX >= c.left)  && (marioRightX <= c.right) && (marioRightY >= c.top) && (marioLeftY <= c.bottom))
             {
@@ -147,69 +139,70 @@ public class LevelOne {
                 score += coin.getValue();
             }
 
+            //Mario hits bottom on coin
+            if((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioLeftY <= c.bottom) && (marioLeftY >= c.top))
+            {
+                coinLoc.remove(i);
+                score += coin.getValue();
+            }
+
+            //Mario hits top of coin
+            if((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioRightY >= c.top) && (marioRightY <= c.bottom))
+            {
+                coinLoc.remove(i);
+                score += coin.getValue();
+            }
+
 
         }
     }
 
 
-    public boolean marioHitBlock(int marioFrameHeight){
+    public boolean marioHitBlock(int marioWidth, int marioHeight){
         boolean output = false;
 
         for(int i = 0; i < blockLoc.size(); i++)
         {
             Rect b = blockLoc.get(i);
 
-            //Block on the ground
-
-            if(((marioRightX  > b.left) && marioLeftX  < b.right)
-                    && ((marioLeftY < b.bottom) && (marioRightY > b.top)))
+            //Mario hits left of block
+            if((marioRightX  >= b.left)  && (marioRightX <= b.right) && (marioRightY >= b.top) && (marioLeftY <= b.bottom))
             {
-                System.out.println("First statement true");
                 output = true;
-                hitBlockLoc = b.top;
+                marioNewYPos = b.top;
+                System.out.println("Mario hits from Left");
             }
 
-
-            //Mario on top of the block
-
-
-            System.out.println("MarioLeftX = " + marioLeftX);
-            System.out.println("MarioLeftY = " + marioLeftY);
-            System.out.println("MarioRightX = " + marioRightX);
-            System.out.println("MarioRightY = " + marioRightY);
-
-            System.out.println("blockLeft = " + b.left);
-            System.out.println("blockRight = " + b.right);
-            System.out.println("blockTop = " + b.top);
-            System.out.println("blockBottom = " + b.bottom);
-
-            /*
-            if(((marioRightX > b.left) && marioLeftX < b.right)
-                    && ((marioLeftY + 10 >= (b.top - marioFrameHeight )) && (marioRightY + 10 <= b.top)))
+            //Mario hits right of block
+            if((marioLeftX <= b.right) && (marioLeftX >= b.left) && (marioLeftY <= b.bottom) && (marioRightY >= b.top))
             {
-                System.out.println("Second statement true");
                 output = true;
-                hitBlockLoc = b.top;
+                marioNewYPos = b.top;
+                System.out.println("Mario Hits from right");
             }
 
-            //Mario below the block
-            if(((marioRightX > b.left) && marioLeftX < b.right)
-                    && ((marioLeftY >= b.bottom)) && (marioRightY <= b.top + marioFrameHeight))
+            //Mario hits bottom on block
+            if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioLeftY <= b.bottom) && (marioLeftY >= b.top))
             {
-                System.out.println("Third statement true");
                 output = true;
-                hitBlockLoc = b.top;
+                marioNewYPos = b.bottom;
+                System.out.println("Mario hits from bottom");
             }
 
-            */
-
+            //Mario hits top of block
+            if((marioLeftX <= b.right + 50) && (marioRightX >= b.left - 50) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
+            {
+                output = true;
+                marioNewYPos = b.top;
+                System.out.println("Mario hits from top");
+            }
 
         }
         return output;
     }
 
-    public int getHitBlockLoc(){ //returns the upper left position of the block
-        return hitBlockLoc;
+    public float getHitBlockLoc(){ //returns the upper left position of the block
+        return marioNewYPos;
     }
 
     public int getBlockHeight(){

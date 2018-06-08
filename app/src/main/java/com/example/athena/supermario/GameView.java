@@ -115,16 +115,27 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void update() {
+
         //update the coordinates of Mario
-        if(levelOne.marioHitBlock(player.getFrameHeight())){
+
+        levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
+        if(levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight())){
             player.setmanXPos(0 - 10, getWidth());
             player.setmanYPos( 0, 1, levelOne.getHitBlockLoc(), levelOne.getBlockHeight());
         }
+        else
+        {
+            player.setmanXPos(runSpeedPerSecond / fps, getWidth());
+            player.setmanYPos((runSpeedPerSecond / fps) * 10, 0, 0,0);
+        }
+        /*
         else {
             player.setmanXPos(runSpeedPerSecond / fps, getWidth());
             player.setmanYPos((runSpeedPerSecond / fps) * 10, 0, 0,0);
         }
-        //Update the coordinates of Mario if
+        */
+
+
 
 
         //update coordinates of the background
@@ -161,7 +172,7 @@ public class GameView extends SurfaceView implements Runnable {
         }
         */
         //Level update();
-        levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
+        //levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
 
 
     }

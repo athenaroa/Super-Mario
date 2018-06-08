@@ -178,7 +178,7 @@ public class Player {
 
     }
 
-    public void setmanYPos(float increment, int hit, int blockLoc, int blockHeight){
+    public void setmanYPos(float increment, int hit, float newYPos, int blockHeight){
         prevmanYPos = manYPos;
         if(jump && hit == 0) {
             System.out.println("JUMP IS TRUEEEEEEEE");
@@ -190,30 +190,24 @@ public class Player {
         }
         else if (jump && hit == 1)
         {
-
+            System.out.println("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+            this.manYPos = newYPos;
         }
         else if (!jump && (hit == 1))
         {
-            System.out.println("NOT JUMP AND HIT");
-            System.out.println("prevmanYPos = " + prevmanYPos);
-            System.out.println("blockLoc = " + blockLoc);
-            this.manYPos =  prevmanYPos + increment;
-
-            //Mario on top of the block
-            if((prevmanYPos < blockLoc + blockHeight) && (prevmanYPos > blockLoc)) //if mario is above the block after releasing jump
-            {
-                System.out.println("Goes into if Statement");
-                this.manYPos = blockLoc;
-            }
-
+            System.out.println("TEST22222222222222222222222222222");
+            this.manYPos =  newYPos;
         }
         else{ //!jump and hit == 0
+
             System.out.println("NOT JUMP AND NOT HIT");
             this.manYPos = prevmanYPos  + increment/10;
+            /*
             if(prevmanYPos > ((frameHeight * 5) + 200))
             {
                 this.manYPos = (frameHeight * 5) + 200;
             }
+            */
         }
     }
 

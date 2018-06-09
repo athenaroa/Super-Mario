@@ -26,6 +26,7 @@ public class LevelOne {
     private Coins coin;
     private Blocks block;
     private float marioNewYPos;
+    private float blockXPos;
 
 
     public LevelOne(Context context, int screenX, int screenY) {
@@ -36,6 +37,7 @@ public class LevelOne {
         marioRightX = 0;
         marioRightY = 0;
         marioNewYPos = 0;
+        blockXPos = 0;
 
         coin = new Coins(context, screenX, screenY);
         block = new Blocks(context, screenX, screenY);
@@ -170,6 +172,7 @@ public class LevelOne {
             {
                 output = true;
                 marioNewYPos = b.top;
+                blockXPos = b.left;
                 System.out.println("Mario hits from Left");
             }
 
@@ -178,6 +181,7 @@ public class LevelOne {
             {
                 output = true;
                 marioNewYPos = b.top;
+                blockXPos = b.left;
                 System.out.println("Mario Hits from right");
 
             }
@@ -187,6 +191,7 @@ public class LevelOne {
             {
                 output = true;
                 marioNewYPos = b.bottom;
+                blockXPos = b.left;
                 System.out.println("Mario hits from bottom");
 
             }
@@ -196,6 +201,7 @@ public class LevelOne {
             {
                 output = true;
                 marioNewYPos = b.top;
+                blockXPos = b.left;
                 System.out.println("Mario hits from top");
 
             }
@@ -219,6 +225,12 @@ public class LevelOne {
 
     public int getBlockHeight(){
         return block.getBlockHeight();
+    }
+    public int getBlockWidth(){
+        return block.getBlockWidth();
+    }
+    public float getBlockXPos(){
+        return blockXPos;
     }
 
 

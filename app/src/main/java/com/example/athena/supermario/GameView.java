@@ -118,17 +118,15 @@ public class GameView extends SurfaceView implements Runnable {
         //update the coordinates of Mario
 
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
-        //System.out.println("Update function: Hit conditional: " + levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight()));
+
         if(levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight())){
             player.setmanXPos(1 ,getWidth());
-            player.setmanYPos(  1, levelOne.getHitBlockLoc());
+            player.setmanYPos(  1, levelOne.getHitBlockLoc(), levelOne.getBlockXPos(), levelOne.getBlockWidth());
         }
         else
         {
             player.setmanXPos(0, getWidth());
-            player.setmanYPos(0, 0);
-          //  player.setmanXPos(runSpeedPerSecond / fps, 0, getWidth());
-           // player.setmanYPos((runSpeedPerSecond / fps) * 10, 0, 0,0);
+            player.setmanYPos(0, 0,0, 0);
         }
 
 
@@ -295,6 +293,10 @@ public class GameView extends SurfaceView implements Runnable {
                 mLastTouchX = x;
                 mLastTouchY = y;
 
+
+
+
+
                 if (dx > 0) {
                     move = 1;
                 } else if (dx < 0) {
@@ -318,8 +320,11 @@ public class GameView extends SurfaceView implements Runnable {
                     System.out.println("U to D");
                 } else if(move == -2){
                     System.out.println("D to U");
+                    control();
                     player.jump();
                     jumpTimeStart = System.currentTimeMillis();
+                    control();
+                    break;
                 }
                 else {
                     System.out.println("Error occurred");

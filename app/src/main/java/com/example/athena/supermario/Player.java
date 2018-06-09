@@ -24,9 +24,12 @@ public class Player {
 
 
     private int frameWidth = 190, frameHeight = 240;
+    private int screenHeight, screenWidth;
 
     private float manXPos, manYPos;
     private float prevmanXPos, prevmanYPos;
+
+
 
 
 
@@ -55,6 +58,9 @@ public class Player {
         run = false;
         marioHitTop = false;
 
+        screenHeight = screenY;
+        screenWidth = screenX;
+
     }
 
     public int getMarioSpeed() {
@@ -70,7 +76,7 @@ public class Player {
         //direction = 1: right
         //direction = 2: left
         direction = direc;
-        System.out.print("Direction = " + direction);
+        //System.out.println("Direction = " + direction);
         run = true;
     }
 
@@ -173,33 +179,26 @@ public class Player {
         }
         else if(!run && !jump)
         {
-            //this.manXPos = prevmanXPos;
             //No move should occur
         }
         else if (!run && jump){
             if(direction == 2){
-                this.manXPos -= marioSpeed *2;
+                this.manXPos -= marioSpeed/2 ;
                 if (prevmanXPos < (frameWidth * 2)) {
                     this.manXPos = frameWidth * 2;
                 }
             }
             else{
-                this.manXPos += marioSpeed *2;
+                this.manXPos += marioSpeed/2 ;
                 if (prevmanXPos > (width - (frameWidth * 2))) {
                     this.manXPos = width - (frameWidth * 2);
                 }
             }
         }
         else if(run && jump){
-            System.out.println("Run and Jump");
-            if(direction == 2) {
-                manXPos += 20;
-            }
-            else
-            {
-                manXPos -= 20;
-            }
+            stopRun();
             canceljump();
+            System.out.println("Run and Jump");
         }
         else {
             System.out.println("Else");
@@ -209,7 +208,7 @@ public class Player {
         }
     }
 
-    public void setmanYPos(int hit, float newYPos){
+    public void setmanYPos(int hit, float newYPos, float blockXPos, int blockWidth){
 
         prevmanYPos = getmanYPos();
 
@@ -221,10 +220,10 @@ public class Player {
         else if(!run && jump){ /////////////////////////////////Mario jumping only
             //System.out.println("SetmanYPos: Conditional 3");
 
-             if (marioHitTop || (hit == 1)){
+             if (marioHitTop || ((hit == 1) && (manXPos >= blockXPos) && (manXPos <= blockXPos + blockWidth ) )){ //if Mario hit the top or hit a block
                 //System.out.println("Mario moving down");
                 //System.out.println("manYPos before:" + manYPos);
-                this.manYPos +=  marioSpeed*5;
+                this.manYPos +=  marioSpeed*2;
                 //System.out.println("manYPos after:" + manYPos);
 
                 if(manYPos + frameHeight >= ((frameHeight * 5) + 200) ){
@@ -233,22 +232,39 @@ public class Player {
                     marioHitTop = false;
                     canceljump();
                 }
+                if((manYPos >= newYPos)&& ( manYPos < manYPos + frameHeight) && (manXPos >= blockXPos) && (manXPos <= blockXPos + blockWidth )){ //mario hits a block
+                    System.out.println("Mario hits block");
+                    System.out.println("newYPos: " + newYPos);
+                    System.out.println("manYPos: " + manYPos);
+                    this.manYPos = newYPos;
+                    marioHitTop = false;
+                    canceljump();
+                }
             }
-            else if( manYPos <= frameHeight)
+            else if( (manYPos <= ( screenHeight/2 - frameHeight) ))
             {
                 marioHitTop = true;
-                //System.out.println("Mario hit the top of the frame : " + frameHeight);
+                System.out.println("Mario hit the top of the frame or newYPos != 0");
+
             }
             else {
                 //System.out.println("Mario moving up");
                 //System.out.println("manYPos before:" + manYPos);
-                this.manYPos -=  marioSpeed*5;
+                this.manYPos -=  marioSpeed*2;
                 //System.out.println("manYPos after:" + manYPos);
             }
         }
         else if (!run && !jump ){
             //System.out.println("SetmanYPos: Conditional 4");
-            this.manYPos = (frameHeight * 5) + 200;
+            if(manYPos >= (newYPos)){
+                this.manYPos = newYPos;
+            }
+            else {
+                this.manYPos = (frameHeight * 5) + 200;
+            }
+        }
+        else if (run && jump){
+            System.out.println("Run and Jump setY");
         }
         else
         {

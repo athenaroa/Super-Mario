@@ -321,6 +321,7 @@ public class GameView extends SurfaceView implements Runnable {
                 } else if(move == -2){
                     System.out.println("D to U");
                     control();
+                    control();
                     player.jump();
                     jumpTimeStart = System.currentTimeMillis();
                     control();

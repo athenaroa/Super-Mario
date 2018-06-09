@@ -171,10 +171,10 @@ public class Player {
         else if(run && !jump && (hit == 1)){
             //System.out.println("");
             if(direction == 2){
-                this.manXPos = prevmanXPos + 20;
+                this.manXPos = prevmanXPos + 30;
             }
             else {
-                this.manXPos = prevmanXPos - 20;
+                this.manXPos = prevmanXPos - 30;
             }
         }
         else if(!run && !jump)
@@ -196,9 +196,9 @@ public class Player {
             }
         }
         else if(run && jump){
-            stopRun();
+            //stopRun();
             canceljump();
-            System.out.println("Run and Jump");
+            System.out.println("Run and Jump , no more should occur");
         }
         else {
             System.out.println("Else");
@@ -228,7 +228,7 @@ public class Player {
 
                 if(manYPos + frameHeight >= ((frameHeight * 5) + 200) ){
                     //System.out.println("Mario is on the ground");
-                    this.manYPos = (frameHeight * 5) + 200;
+                    this.manYPos = (frameHeight * 5) + 200 + 10;
                     marioHitTop = false;
                     canceljump();
                 }
@@ -255,13 +255,8 @@ public class Player {
             }
         }
         else if (!run && !jump ){
-            //System.out.println("SetmanYPos: Conditional 4");
-            if(manYPos >= (newYPos)){
-                this.manYPos = newYPos;
-            }
-            else {
-                this.manYPos = (frameHeight * 5) + 200;
-            }
+            System.out.println("SetmanYPos: Conditional 4");
+            this.manYPos = (frameHeight * 5) + 200;
         }
         else if (run && jump){
             System.out.println("Run and Jump setY");

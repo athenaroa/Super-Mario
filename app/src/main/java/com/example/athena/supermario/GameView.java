@@ -118,7 +118,7 @@ public class GameView extends SurfaceView implements Runnable {
         //update the coordinates of Mario
 
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
-        System.out.println("Update function: Hit conditional: " + levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight()));
+        //System.out.println("Update function: Hit conditional: " + levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight()));
         if(levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight())){
             player.setmanXPos(1 ,getWidth());
             player.setmanYPos(  1, levelOne.getHitBlockLoc());

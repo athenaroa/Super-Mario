@@ -269,9 +269,6 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
-
-
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -335,8 +332,6 @@ public class GameView extends SurfaceView implements Runnable {
                 player.stopRun();
                 //player.canceljump();
                 motion = 0;
-
-
                 break;
             }
 

@@ -210,8 +210,6 @@ public class LevelOne {
             }
 
         }
-
-        System.out.println("Output = " + output);
         return output;
     }
 

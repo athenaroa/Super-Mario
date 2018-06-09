@@ -174,30 +174,44 @@ public class LevelOne {
             }
 
             //Mario hits right of block
-            if((marioLeftX <= b.right) && (marioLeftX >= b.left) && (marioLeftY <= b.bottom) && (marioRightY >= b.top))
+            else if((marioLeftX <= b.right) && (marioLeftX >= b.left) && (marioLeftY <= b.bottom) && (marioRightY >= b.top))
             {
                 output = true;
                 marioNewYPos = b.top;
                 System.out.println("Mario Hits from right");
+
             }
 
             //Mario hits bottom on block
-            if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioLeftY <= b.bottom) && (marioLeftY >= b.top))
+            else if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioLeftY <= b.bottom) && (marioLeftY >= b.top))
             {
                 output = true;
                 marioNewYPos = b.bottom;
                 System.out.println("Mario hits from bottom");
+
             }
 
             //Mario hits top of block
-            if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
+            else if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
             {
                 output = true;
                 marioNewYPos = b.top;
                 System.out.println("Mario hits from top");
+
+            }
+            else
+            {
+                //System.out.println("WENT INTO ELSE: LEVEL ONE BLOCK CHECK");
+            }
+
+
+            if(output == true){
+                break;
             }
 
         }
+
+        System.out.println("Output = " + output);
         return output;
     }
 

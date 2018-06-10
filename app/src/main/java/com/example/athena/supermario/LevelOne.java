@@ -27,6 +27,7 @@ public class LevelOne {
     private Blocks block;
     private float marioNewYPos;
     private float blockXPos;
+    private int hitType;
 
 
     public LevelOne(Context context, int screenX, int screenY) {
@@ -38,6 +39,8 @@ public class LevelOne {
         marioRightY = 0;
         marioNewYPos = 0;
         blockXPos = 0;
+        int hitType = 0;
+
 
         coin = new Coins(context, screenX, screenY);
         block = new Blocks(context, screenX, screenY);
@@ -114,10 +117,10 @@ public class LevelOne {
     }
 
     public void update(float marioXPos, float marioYPos, int marioWidth, int marioHeight, int backFrame){
-        updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight);
+        updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight); //locally updates mario's position
         this.backFrame = backFrame;
         marioHitCoin();
-        updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight);
+        //updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight);
     }
 
     public void marioHitCoin(){
@@ -151,7 +154,7 @@ public class LevelOne {
             //Mario hits top of coin
             if((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioRightY >= c.top) && (marioRightY <= c.bottom))
             {
-                coinLoc.remove(i);
+                //coinLoc.remove(i);
                 score += coin.getValue();
             }
 
@@ -174,6 +177,7 @@ public class LevelOne {
                 marioNewYPos = b.top;
                 blockXPos = b.left;
                 System.out.println("Mario hits from Left");
+                hitType = 1;
             }
 
             //Mario hits right of block
@@ -183,6 +187,7 @@ public class LevelOne {
                 marioNewYPos = b.top;
                 blockXPos = b.left;
                 System.out.println("Mario Hits from right");
+                hitType = 2;
 
             }
 
@@ -193,6 +198,7 @@ public class LevelOne {
                 marioNewYPos = b.bottom;
                 blockXPos = b.left;
                 System.out.println("Mario hits from bottom");
+                hitType = 3;
 
             }
 
@@ -203,6 +209,7 @@ public class LevelOne {
                 marioNewYPos = b.top;
                 blockXPos = b.left;
                 System.out.println("Mario hits from top");
+                hitType = 4;
 
             }
             else
@@ -223,17 +230,16 @@ public class LevelOne {
         return marioNewYPos;
     }
 
-    public int getBlockHeight(){
-        return block.getBlockHeight();
+    public int getHitType() {
+        return hitType;
     }
-    public int getBlockWidth(){
-        return block.getBlockWidth();
-    }
-    public float getBlockXPos(){
+
+    public float getBlockXPos() {
         return blockXPos;
     }
 
-
-
+    public int getBlockWidth(){
+        return block.getBlockWidth();
+    }
 }
 

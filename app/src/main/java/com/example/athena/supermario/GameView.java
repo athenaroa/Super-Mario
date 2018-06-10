@@ -37,6 +37,9 @@ public class GameView extends SurfaceView implements Runnable {
     private int motion;
     private int backPosX;
     private int backFrame;
+    private final int backgroundSpeed = 8;
+    private int midScreenPos;
+
 
     //Mario variables
     private long jumpTimeStart;
@@ -100,6 +103,7 @@ public class GameView extends SurfaceView implements Runnable {
         jumpTimeStart = 0;
         jumpTimeMax = 1000;
         backFrame = 1;
+        midScreenPos = screenX/2;
 
     }
 
@@ -147,12 +151,14 @@ public class GameView extends SurfaceView implements Runnable {
 
 
         //update coordinates of the background
-        if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
-            backPosX += 5;
-            levelOne.updateCoinPos(-5);
-            levelOne.updateBlockPos(-5);
-            levelOne.updateFlowerPos(-5);
-            levelOne.updateMushroomPos(-5);
+        //if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
+        if(motion == 1 && (player.getmanXPos() > midScreenPos) && (player.getDirection() == 1)){
+            player.changeMarioSpeed(-7);
+            backPosX += backgroundSpeed;
+            levelOne.updateCoinPos(-backgroundSpeed);
+            levelOne.updateBlockPos(-backgroundSpeed);
+            levelOne.updateFlowerPos(-backgroundSpeed);
+            levelOne.updateMushroomPos(-backgroundSpeed);
 
             if(backPosX > getWidth())
             {
@@ -160,19 +166,23 @@ public class GameView extends SurfaceView implements Runnable {
                 backFrame += 1;
             }
         }
-        else if(motion == 1 && (player.getmanXPos() < (getWidth()/4)) && (player.getDirection() == 2)) {
+        //else if(motion == 1 && (player.getmanXPos() < (getWidth()/4)) && (player.getDirection() == 2)) {
+        else if(motion == 1 && (player.getmanXPos() < midScreenPos) && (player.getDirection() == 2)) {
+            player.changeMarioSpeed(-7);
             backPosX -= 5;
-            levelOne.updateCoinPos(5);
-            levelOne.updateBlockPos(5);
-            levelOne.updateFlowerPos(5);
-            levelOne.updateMushroomPos(5);
+            levelOne.updateCoinPos(backgroundSpeed);
+            levelOne.updateBlockPos(backgroundSpeed);
+            levelOne.updateFlowerPos(backgroundSpeed);
+            levelOne.updateMushroomPos(backgroundSpeed);
             if(backPosX < 0- getWidth())
             {
                 backPosX = 0;
                 backFrame -= 1;
             }
         }
-        else{}
+        else{
+            player.changeMarioSpeed(1);
+        }
 
     }
 

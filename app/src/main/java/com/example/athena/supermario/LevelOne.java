@@ -386,7 +386,6 @@ public class LevelOne {
         }
     }
 
-
     public boolean marioOnBlock(){
 
         boolean result = false;

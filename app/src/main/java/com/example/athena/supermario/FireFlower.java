@@ -41,10 +41,8 @@ public class FireFlower {
 
     public ArrayList<Rect> levelOneFlowerLoc(int screenX, int screenY){
         Rect flower1;
-
-        //Frame 2
-        flower1 = new Rect(screenX - 300, screenY - (flowerHeight + flowerHeight/2),
-                (screenX +flowerWidth) - 300 , screenY - (flowerWidth/2));
+        flower1 = new Rect(screenX/2, ((screenY/2) + 200) - flowerHeight,
+                ((screenX/2) + flowerWidth), (screenY/2) + 200);
         flowerLoc.add(flower1);
 
         return flowerLoc;

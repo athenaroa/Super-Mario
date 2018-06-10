@@ -32,6 +32,8 @@ public class Player {
     private boolean run;
     private boolean marioHitTop;
     private int marioSpeed;
+    private int marioMaxSpeed;
+    private int marioMinSpeed;
 
     //Max X coordinate so mario does not go out of screen
     private int maxX;
@@ -66,6 +68,8 @@ public class Player {
         marioForm = 1;
 
         marioSpeed = 10;
+        marioMaxSpeed = 10;
+        marioSpeed = 2;
         manXPos = 10;
         manYPos = (frameHeight * 5) + 200;
         manXPosRight = manXPos + frameWidth;
@@ -101,14 +105,25 @@ public class Player {
         screenHeight = screenY;
         screenWidth = screenX;
 
-        maxX = screenX - frameWidth;
+        maxX = screenX - (frameWidth * 2);
         minX = frameWidth;
 
 
     }
 
-    public int getMarioSpeed() {
-        return marioSpeed;
+    public void changeMarioSpeed( int change) {
+        if(marioSpeed + change > marioMaxSpeed)
+        {
+            this.marioSpeed = marioMaxSpeed;
+        }
+        else if (marioSpeed + change < marioMinSpeed)
+        {
+            this.marioSpeed = marioMinSpeed;
+        }
+        else
+        {
+            this.marioSpeed += change;
+        }
     }
 
     public int getDirection(){

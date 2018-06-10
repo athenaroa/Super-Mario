@@ -34,6 +34,7 @@ public class Player {
 
 
     private boolean marioOnBlock;
+    private boolean marioHitABlock;
 
 
 
@@ -60,12 +61,13 @@ public class Player {
 
 
         maxX = screenX - runningMario.getWidth();
-        minX = 0;
+        minX = frameWidth;
 
         jump = false;
         run = false;
         marioHitTop = false;
         marioOnBlock = false;
+        marioHitABlock = false;
 
         screenHeight = screenY;
         screenWidth = screenX;
@@ -157,51 +159,74 @@ public class Player {
         return manYPos;
     }
 
-    public void setmanXPos(int hit, int width){
+    public void updateMarioPos(){
+       updateX();
+       updateY();
+    }
+
+    public void runRight(){
+        this.manXPos += marioSpeed;
+        if (prevmanXPos > maxX) { //Mario is all the way to the right of the screen
+            this.manXPos = maxX;
+        }
+    }
+
+    public void runLeft(){
+        this.manXPos -= marioSpeed;
+        if (prevmanXPos < minX) { //Mario is all the way to the left of the screen
+            this.manXPos = minX;
+        }
+    }
+
+
+    public void updateX(/*int hit, int width*/){
         prevmanXPos = getmanXPos();
 
-        if(run && !jump && (hit == 0))
+        if(run && !jump && !marioHitABlock) //Mario is running freely
         {
             //System.out.println("Run and NOT jump and NOT hit");
             if(direction == 2) {
-                this.manXPos -= marioSpeed;
-                if (prevmanXPos < (frameWidth * 2)) {
-                    this.manXPos = frameWidth * 2;
-                }
+                runLeft();
             }
             else //Direction is to the right
             {
-                this.manXPos += marioSpeed;
-                if (prevmanXPos > (width - (frameWidth * 2))) {
-                    this.manXPos = width - (frameWidth * 2);
-
+                runRight();
+            }
+        }
+        else if(run && !jump && marioHitABlock){ //Mario is running but hit block
+            if(marioOnBlock){
+                //If mario is on top of a block
+                if(direction == 2) {
+                    runLeft();
+                }
+                else //Direction is to the right
+                {
+                    runRight();
+                }
+            }
+            else {
+                if (direction == 2) { //Direction is to the left
+                    this.manXPos = prevmanXPos + 50; //Pushing mario to the right away from block
+                } else {
+                    this.manXPos = prevmanXPos - 50; //Pushing mario to the left away from block
                 }
             }
         }
-        else if(run && !jump && (hit == 1)){
-            //System.out.println("");
-            if(direction == 2){
-                this.manXPos = prevmanXPos + 30;
-            }
-            else {
-                this.manXPos = prevmanXPos - 30;
-            }
-        }
-        else if(!run && !jump)
+        else if(!run && !jump) //Mario is not running or jumping
         {
             //No move should occur
         }
         else if (!run && jump){
             if(direction == 2){
                 this.manXPos -= marioSpeed/2 ;
-                if (prevmanXPos < (frameWidth * 2)) {
-                    this.manXPos = frameWidth * 2;
+                if (prevmanXPos < minX) {
+                    this.manXPos = minX;
                 }
             }
             else{
                 this.manXPos += marioSpeed/2 ;
-                if (prevmanXPos > (width - (frameWidth * 2))) {
-                    this.manXPos = width - (frameWidth * 2);
+                if (prevmanXPos > maxX) {
+                    this.manXPos = maxX;
                 }
             }
         }
@@ -214,15 +239,17 @@ public class Player {
             System.out.println("Else");
             System.out.println("Run = " + run);
             System.out.println("Jump = " + jump);
-            System.out.println("Hit = " + hit);
+            //System.out.println("Hit = " + hit);
         }
     }
 
-
-
-    public void updateMarioPos(){
+    public void setMarioOnBlock(boolean result){
+        this.marioOnBlock = true;
     }
 
+    public void setMarioHitABlock(boolean result) {
+        this.marioHitABlock = result;
+    }
 
     public void checkMarioHitTop(){
         if( (manYPos <= ( screenHeight/2 - frameHeight) )) //
@@ -230,50 +257,40 @@ public class Player {
             marioHitTop = true;
             System.out.println("Mario hit the top of the frame");
         }
-        else
-        {
-            marioHitTop = false;
-        }
-
     }
 
-    public void setmanYPos(int hit, float newYPos, int hitType, float blockXPos, float blockWidth){
+    public void checkMarioHitGround(){
+        if((manYPos + frameHeight >= ((frameHeight * 5) + 200))){
+            System.out.println("Mario hit the ground");
+            this.manYPos = (frameHeight * 5) + 200;
+            marioHitTop = false;
+            canceljump(); //Cancel jump because mario should move down anymore
+        }
+    }
+
+    public void updateY( /*int hit, float newYPos, int hitType, float blockXPos, float blockWidth*/){
 
         prevmanYPos = getmanYPos();
 
-        if((run && !jump && (hit == 0)) ||(run && !jump && (hit == 1)) )
+        if((run && !jump && !marioHitABlock ) ||(run && !jump && marioHitABlock) )
         {
             //No movement in y-direction should occur
+            //mario is running and doesnt hit anything
+            //or Mario is running and hits an item which means no change in Y should happen
         }
         else if(!run && jump){ //Mario jumping only
 
-             if (marioHitTop || (hit == 1)){ //if Mario hit the top or hit A BLOCK
+             checkMarioHitTop();
+             if (marioHitTop || marioHitABlock){ //if Mario hit the top or hit A BLOCK
 
                  this.manYPos +=  marioSpeed*2; //Mario moving down
-                 /*
-                 if(marioHitTop){
-                     this.manYPos +=  marioSpeed*2;
-                 }
-                 */
-                /*else*/ if (hit == 1){
+                 if (marioHitABlock){
                     System.out.println("Mario hits a block");
-                    System.out.println("Hit type: " + hitType);
+                    //System.out.println("Hit type: " + hitType);
                     //marioHitTop = false;
                     //this.manYPos +=  marioSpeed*2;
                  }
-                if((manYPos + frameHeight >= ((frameHeight * 5) + 200))){
-                    System.out.println("Mario hit the ground");
-                     this.manYPos = (frameHeight * 5) + 200;
-                     marioHitTop = false;
-                     canceljump(); //Cancel jump because mario should move down anymore
-                }
-
-            }
-            else if( (manYPos <= ( screenHeight/2 - frameHeight) )) //
-            {
-                marioHitTop = true;
-                System.out.println("Mario hit the top of the frame");
-
+                 checkMarioHitGround();
             }
             else {
                 //System.out.println("Mario moving up");
@@ -282,11 +299,14 @@ public class Player {
                 //System.out.println("manYPos after:" + manYPos);
             }
         }
-        else if (!run && !jump ){
+        else if (!run && !jump ){ //Mario is not running or jumping; potentially falling or standing still
             //System.out.println("SetmanYPos: Conditional 4");
             if(marioOnBlock){
                 System.out.println("Mario is on top of block");
-                if(hit == 1){
+                //Mario is on the block do not change Y
+
+                /*
+                if(marioHitABlock){
                     System.out.printf("Mario is still hitting the block");
                     this.manYPos = newYPos;
                 }
@@ -295,6 +315,7 @@ public class Player {
                     System.out.println("marioOnBlock is now false");
                     marioOnBlock = false;
                 }
+                */
             }
             else {
                 this.manYPos = (frameHeight * 5) + 200;

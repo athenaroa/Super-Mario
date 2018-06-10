@@ -117,17 +117,28 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
 
         //update the coordinates of Mario
+
+        //Updates the Level class with current mario position
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
 
-        if(levelOne.marioHitBlock(player.getFrameWidth(), player.getFrameHeight())){
-            player.setmanXPos(1 ,getWidth());
-            player.setmanYPos(  1, levelOne.getHitBlockLoc(),  levelOne.getHitType(),levelOne.getBlockXPos(), levelOne.getBlockWidth());
+        //Checking if mario is on-top of a block in the level and updates the player object
+        if(levelOne.marioOnBlock()){
+            player.setMarioOnBlock(true);
         }
-        else
+        else{
+            player.setMarioOnBlock(false);
+        }
+        //Checking if mario HIT a block in the level and updates the player object
+        if(levelOne.marioHitBlock(player.getFrameWidth(),player.getFrameHeight()))
         {
-            player.setmanXPos(0, getWidth());
-            player.setmanYPos(0, 0,0,0,0);
+            player.setMarioHitABlock(true);
         }
+        else{
+            player.setMarioHitABlock(false);
+        }
+
+        //update mario position
+        player.updateMarioPos();
 
 
         //update coordinates of the background

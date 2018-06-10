@@ -11,7 +11,12 @@ public class Player {
     private Bitmap jumpingMario;
     private Bitmap jumpingMarioLEFT;
     private Bitmap superjumpingMario;
-    private int marioType = 1;
+
+    private int marioType; //reg running, reg jump...
+    private int marioForm; //reg, super, fire
+
+
+
     private int direction;
     private boolean jump;
     private boolean run;
@@ -35,6 +40,7 @@ public class Player {
 
     private boolean marioOnBlock;
     private boolean marioHitABlock;
+    private boolean marioHitGround;
 
 
 
@@ -44,6 +50,10 @@ public class Player {
 
     //constructor
     public Player(Context context, int screenX, int screenY) {
+
+
+        marioType = 1;
+        marioForm = 1;
 
         marioSpeed = 10;
         manXPos = 10;
@@ -67,6 +77,7 @@ public class Player {
         marioHitTop = false;
         marioOnBlock = false;
         marioHitABlock = false;
+        marioHitGround = true;
 
         screenHeight = screenY;
         screenWidth = screenX;
@@ -121,18 +132,26 @@ public class Player {
 
     public int getFrameHeight(){
 
-        switch(whichMario()){
+        switch(marioType){
             case 1: //normal running mario
                 frameHeight = 150;
                 break;
             case 2: //normal jumping mario
-                frameHeight = 200; //super jumping mario 220
+                frameHeight = 200;
                 break;
+
             case 3: //SUPER running mario
                 frameHeight = 0; //super jumping mario 220
                 break;
             case 4: //SUPER jumping mario
                 frameHeight = 220;
+                break;
+
+
+            case 5: //fire running mario
+                frameHeight = 150;
+                break;
+            case 6:  //fire jumping mario
                 break;
         }
         return frameHeight;
@@ -143,22 +162,9 @@ public class Player {
     }
 
     public float getmanYPos(){
-
-        switch(whichMario()){
-            case 1: //normal running mario
-                manYPos = (frameHeight * 5) + 200;
-                break;
-            case 2: //normal jumping mario
-                //manYPos = (frameHeight * 5) - 200;
-                break;
-            case 3: //SUPER running mario
-                manYPos = 0;
-                break;
-            case 4: //SUPER jumping mario
-                manYPos = 0;
-                break;
+        if(marioType == 1){
+            this.manYPos = (frameHeight * 5) + 200;
         }
-
         return manYPos;
     }
 
@@ -269,14 +275,16 @@ public class Player {
 
     public void checkMarioHitGround(){
         if((manYPos + frameHeight >= ((frameHeight * 5) + 200))){
-            //System.out.println("Mario hit the ground");
+            System.out.println("Mario hit the ground");
+            marioType = 1;
+            marioHitGround = true;
             this.manYPos = (frameHeight * 5) + 200;
             marioHitTop = false;
             canceljump(); //Cancel jump because mario should move down anymore
         }
     }
 
-    public void updateY( /*int hit, float newYPos, int hitType, float blockXPos, float blockWidth*/){
+    public void updateY( ){
 
         prevmanYPos = getmanYPos();
 
@@ -308,7 +316,9 @@ public class Player {
                     }
                  }
                  else{
+                     System.out.println("Moving down at this point");
                      this.manYPos +=  marioSpeed*2; //Mario moving down
+
                  }
                  checkMarioHitGround();
             }
@@ -323,6 +333,7 @@ public class Player {
             //System.out.println("SetmanYPos: Conditional 4");
             if(marioOnBlock){
                 System.out.println("Mario is on top of block");
+                this.manYPos = prevmanYPos;
                 //Mario is on the block do not change Y
 
                 if(marioHitABlock){
@@ -334,12 +345,11 @@ public class Player {
                     System.out.println("marioOnBlock is now false");
                     marioOnBlock = false;
                 }
-
             }
             else
             {
-                System.out.println("Mario is not on top of block: !run and !jump");
-                this.manYPos +=  marioSpeed*2; //Mario moving down
+                //System.out.println("Mario is not on top of block: !run and !jump");
+                //this.manYPos +=  marioSpeed; //Mario moving down
                 checkMarioHitGround();
             }
         }
@@ -361,35 +371,45 @@ public class Player {
         this.jump = false;
     }
 
-    public int whichMario(){
-        return marioType;
+
+
+    public void updateMarioForm(int newForm){
+        //1 : reg mario
+        //2 : super mario
+        //3 : fire mario
+        this.marioForm = newForm;
     }
 
     public Bitmap getBitmap() {
-        if(jump == true)
-        {
-            marioType = 2;
-            return jumpingMario;
+        Bitmap m = runningMario;
+
+        if(marioForm == 1) {
+            if(run)
+            {
+                marioType = 1;
+                if (direction == 2)
+                {
+                  m = runningMarioLEFT;
+                }
+                else {
+                    m = runningMario;
+                }
+            }
+            else if (jump){
+                marioType = 2;
+                if(direction == 2){
+                    m = jumpingMarioLEFT;
+                }
+                else
+                {
+                    m = jumpingMario;
+                }
+            }
+            else {
+                m = runningMario;
+            }
         }
-        else if (!jump && (direction == 1))
-        {
-            marioType = 1;
-            return runningMario;
-        }
-        else if (!jump && (direction == 2)) //same mario frame but mario going left
-        {
-            marioType = 1;
-            return runningMarioLEFT;
-        }
-        else if (!jump && (direction == 2))
-        {
-            marioType = 2;
-            return jumpingMarioLEFT;
-        }
-        else
-        {
-            return runningMario;
-        }
+        return m;
 
     }
 }

@@ -31,7 +31,7 @@ public class LevelOne {
     private float marioNewYPos;
     private float blockXPos;
     private int hitType;
-
+    private int marioForm;
 
     public LevelOne(Context context, int screenX, int screenY) {
 
@@ -42,7 +42,7 @@ public class LevelOne {
         marioRightY = 0;
         marioNewYPos = 0;
         blockXPos = 0;
-        int hitType = 0;
+        marioForm = 1;
 
 
         coin = new Coins(context, screenX, screenY);
@@ -135,7 +135,8 @@ public class LevelOne {
         this.marioRightY = marioYPos + marioHeight;
     }
 
-    public void updateMarioBitmap(){
+    public int updateMarioForm(){
+        return marioForm;
 
     }
 
@@ -159,11 +160,13 @@ public class LevelOne {
                     if(i == 0) {
                         flowerLoc = null;
                         score += flower.getValue();
+                        marioForm = 3;
                         break;
                     }
                     else {
                         flowerLoc.remove(i);
                         score += flower.getValue();
+                        marioForm = 3;
                         break;
                     }
                 }
@@ -173,11 +176,13 @@ public class LevelOne {
                     if(i == 0) {
                         flowerLoc = null;
                         score += flower.getValue();
+                        marioForm = 3;
                         break;
                     }
                     else {
                         flowerLoc.remove(i);
                         score += flower.getValue();
+                        marioForm = 3;
                         break;
                     }
                 }
@@ -187,10 +192,12 @@ public class LevelOne {
                     if (i == 0) {
                         flowerLoc = null;
                         score += flower.getValue();
+                        marioForm = 3;
                         break;
                     } else {
                         flowerLoc.remove(i);
                         score += flower.getValue();
+                        marioForm = 3;
                         break;
                     }
 
@@ -201,16 +208,16 @@ public class LevelOne {
                     if(i == 0) {
                         flowerLoc = null;
                         score += flower.getValue();
+                        marioForm = 3;
                         break;
                     }
                     else {
                         flowerLoc.remove(i);
                         score += flower.getValue();
+                        marioForm = 3;
                         break;
                     }
                 }
-
-
             }
         }
     }
@@ -293,7 +300,7 @@ public class LevelOne {
         {
             Rect b = blockLoc.get(i);
             //Mario hits top of block
-            if((marioCenterX <= b.right + 100) && (marioCenterX >= b.left - 100) && (marioRightY <= b.top))
+            if((marioCenterX <= b.right) && (marioCenterX >= b.left ) && (marioRightY <= b.top))
             {
                 System.out.println("On top of Block i: " + i);
                 result = true;

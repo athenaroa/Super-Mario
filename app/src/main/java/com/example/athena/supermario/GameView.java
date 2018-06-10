@@ -119,6 +119,7 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
 
         //update the coordinates of Mario
+        player.updateMarioForm(levelOne.updateMarioForm());
 
         //Updates the Level class with current mario position
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
@@ -276,7 +277,6 @@ public class GameView extends SurfaceView implements Runnable {
                     canvas.drawBitmap(levelOne.getFlowerBitmap(), null, f, null);
                 }
             }
-
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

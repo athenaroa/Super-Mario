@@ -34,6 +34,7 @@ public class Player {
     private int marioSpeed;
     private int marioMaxSpeed;
     private int marioMinSpeed;
+    private int marioJumpingSpeed;
 
     //Max X coordinate so mario does not go out of screen
     private int maxX;
@@ -66,10 +67,16 @@ public class Player {
 
         marioType = 1;
         marioForm = 1;
-
         marioSpeed = 10;
         marioMaxSpeed = 10;
-        marioSpeed = 2;
+        marioMinSpeed = 2;
+        marioJumpingSpeed = marioSpeed*6;
+
+
+
+
+
+
         manXPos = 10;
         manYPos = (frameHeight * 5) + 200;
         manXPosRight = manXPos + frameWidth;
@@ -115,14 +122,17 @@ public class Player {
         if(marioSpeed + change > marioMaxSpeed)
         {
             this.marioSpeed = marioMaxSpeed;
+            //this.marioJumpingSpeed = marioSpeed*2;
         }
         else if (marioSpeed + change < marioMinSpeed)
         {
             this.marioSpeed = marioMinSpeed;
+            //this.marioJumpingSpeed = marioSpeed*2;
         }
         else
         {
             this.marioSpeed += change;
+            //this.marioJumpingSpeed = marioSpeed*2;
         }
     }
 
@@ -287,13 +297,13 @@ public class Player {
         }
         else if (!run && jump){ //Mario is jumping
             if(direction == 2){
-                this.manXPos -= marioSpeed ;
+                this.manXPos -= marioMaxSpeed ;
                 if (prevmanXPos < minX) {
                     this.manXPos = minX;
                 }
             }
             else{
-                this.manXPos += marioSpeed ;
+                this.manXPos += marioMaxSpeed ;
                 if (prevmanXPos > maxX) {
                     this.manXPos = maxX;
                 }
@@ -324,7 +334,7 @@ public class Player {
         if( (manYPos <= ( screenHeight/2 - frameHeight) )) //
         {
             marioHitTop = true;
-            System.out.println("Mario hit the top of the frame");
+            //System.out.println("Mario hit the top of the frame");
         }
     }
 
@@ -333,7 +343,7 @@ public class Player {
 
         if(marioType == 1 || marioType == 2){
             if((manYPos + frameHeight >= ((frameHeight * 5) + 200))){
-                System.out.println("Regular Mario hit the ground");
+                //System.out.println("Regular Mario hit the ground");
                 marioType = 1;
                 marioHitGround = true;
                 this.manYPos = (frameHeight * 5) + 200;
@@ -343,7 +353,7 @@ public class Player {
         }
         else if (marioType == 3 || marioType == 4){
             if((manYPos + frameHeight >= (frameHeight * 3) + 160)){
-                System.out.println(" Super Mario hit the ground");
+                //System.out.println(" Super Mario hit the ground");
                 marioType = 3;
                 marioHitGround = true;
                 this.manYPos = (frameHeight * 3) + 160;
@@ -354,7 +364,7 @@ public class Player {
         }
         else if (marioType == 5 || marioType == 6){
             if((manYPos + frameHeight >= (frameHeight * 3) + 160)){
-                System.out.println(" Fire Mario hit the ground");
+                //System.out.println(" Fire Mario hit the ground");
                 marioType = 5;
                 marioHitGround = true;
                 this.manYPos = (frameHeight * 3) + 160;
@@ -402,14 +412,14 @@ public class Player {
                     else
                     {
                         System.out.println("Moving down from block");
-                        this.manYPos +=  marioSpeed*2; //Mario moving down
+                        this.manYPos += marioJumpingSpeed; //Mario moving down
                         marioHitTop = false; //can no longer hit the top if it hit the block
                         canceljump();
                     }
                  }
                  else{
                      System.out.println("Moving down at this point");
-                     this.manYPos +=  marioSpeed*2; //Mario moving down
+                     this.manYPos +=  marioJumpingSpeed; //Mario moving down
                      //checkMarioHitGround();
 
                  }
@@ -418,7 +428,7 @@ public class Player {
             else {
                 //System.out.println("Mario moving up");
                 //System.out.println("manYPos before:" + manYPos);
-                this.manYPos -=  marioSpeed*2;
+                this.manYPos -=  marioJumpingSpeed;
                 //System.out.println("manYPos after:" + manYPos);
             }
         }

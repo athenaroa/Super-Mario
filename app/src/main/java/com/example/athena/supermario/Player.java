@@ -189,13 +189,19 @@ public class Player {
 
     public float getmanYPos(){
         if(marioType == 1){
-            this.manYPos = (frameHeight * 5) + 200;
+            if(!marioOnBlock) {
+                this.manYPos = (frameHeight * 5) + 200;
+            }
         }
         else if (marioType == 3){
-            this.manYPos = (frameHeight * 3) + 160;
+            if(!marioOnBlock) {
+                this.manYPos = (frameHeight * 3) + 160;
+            }
         }
         else if (marioType == 5){
-            this.manYPos = (frameHeight * 3) + 160;
+            if(!marioOnBlock) {
+                this.manYPos = (frameHeight * 3) + 160;
+            }
         }
         return manYPos;
     }
@@ -360,6 +366,9 @@ public class Player {
             //or Mario is running and hits an item which means no change in Y should happen
 
             //System.out.println("Went in hereeeeeeeeeeeeeeeeeeeeeeeeeeee");
+            if(marioOnBlock){
+                this.manYPos = prevmanYPos;
+            }
 
         }
         else if(!run && jump){ //Mario jumping only
@@ -386,7 +395,7 @@ public class Player {
                  else{
                      System.out.println("Moving down at this point");
                      this.manYPos +=  marioSpeed*2; //Mario moving down
-                     checkMarioHitGround();
+                     //checkMarioHitGround();
 
                  }
                  checkMarioHitGround();

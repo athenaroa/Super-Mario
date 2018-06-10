@@ -64,6 +64,7 @@ public class GameView extends SurfaceView implements Runnable {
     ArrayList<Rect> levelCoins;
     ArrayList<Rect> levelBlocks;
     ArrayList<Rect> levelFlowers;
+    ArrayList<Rect> levelMushrooms;
 
 
 
@@ -87,6 +88,7 @@ public class GameView extends SurfaceView implements Runnable {
         levelCoins = new ArrayList<>();
         levelBlocks = new ArrayList<>();
         levelFlowers = new ArrayList<>();
+        levelMushrooms = new ArrayList<>();
 
         //initializing drawing objects
         surfaceHolder = getHolder();
@@ -150,6 +152,7 @@ public class GameView extends SurfaceView implements Runnable {
             levelOne.updateCoinPos(-5);
             levelOne.updateBlockPos(-5);
             levelOne.updateFlowerPos(-5);
+            levelOne.updateMushroomPos(-5);
 
             if(backPosX > getWidth())
             {
@@ -162,6 +165,7 @@ public class GameView extends SurfaceView implements Runnable {
             levelOne.updateCoinPos(5);
             levelOne.updateBlockPos(5);
             levelOne.updateFlowerPos(5);
+            levelOne.updateMushroomPos(5);
             if(backPosX < 0- getWidth())
             {
                 backPosX = 0;
@@ -275,6 +279,15 @@ public class GameView extends SurfaceView implements Runnable {
                 for (int i = 0; i < levelOne.getFlowerLoc().size(); i++) {
                     Rect f = new Rect(levelFlowers.get(i).left, levelFlowers.get(i).top, levelFlowers.get(i).right, levelFlowers.get(i).bottom);
                     canvas.drawBitmap(levelOne.getFlowerBitmap(), null, f, null);
+                }
+            }
+
+            //Drawing Mushrooms
+            levelMushrooms = levelOne.getMushroomLoc();
+            if(levelOne.getMushroomLoc() != null) {
+                for (int i = 0; i < levelOne.getMushroomLoc().size(); i++) {
+                    Rect f = new Rect(levelMushrooms.get(i).left, levelMushrooms.get(i).top, levelMushrooms.get(i).right, levelMushrooms.get(i).bottom);
+                    canvas.drawBitmap(levelOne.getMushroomBitmap(), null, f, null);
                 }
             }
 

@@ -10,7 +10,11 @@ public class Player {
     private Bitmap runningMarioLEFT;
     private Bitmap jumpingMario;
     private Bitmap jumpingMarioLEFT;
+
+    private Bitmap superRunMario;
     private Bitmap superjumpingMario;
+    private Bitmap superRunMarioLEFT;
+    private Bitmap superJumpMarioLEFT;
 
     private int marioType; //reg running, reg jump...
     private int marioForm; //reg, super, fire
@@ -67,7 +71,11 @@ public class Player {
         jumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.normaljumpmario);
         runningMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.normalrunmmarioleft);
         jumpingMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.normaljumpmarioleft);
+
+        superRunMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.superrunmario);
         superjumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmario);
+        superRunMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.superrunmarioleft);
+        superJumpMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmarioleft);
 
 
 
@@ -120,7 +128,7 @@ public class Player {
                 frameWidth = 150; //super jumping mario 165
                 break;
             case 3: //SUPER running mario
-                frameWidth = 0; //super jumping mario 165
+                frameWidth = 165; //super jumping mario 165
                 break;
             case 4: //SUPER jumping mario
                 frameWidth = 165;
@@ -141,7 +149,7 @@ public class Player {
                 break;
 
             case 3: //SUPER running mario
-                frameHeight = 0; //super jumping mario 220
+                frameHeight = 220; //super jumping mario 220
                 break;
             case 4: //SUPER jumping mario
                 frameHeight = 220;
@@ -164,6 +172,9 @@ public class Player {
     public float getmanYPos(){
         if(marioType == 1){
             this.manYPos = (frameHeight * 5) + 200;
+        }
+        else if (marioType == 3){
+            this.manYPos = (frameHeight * 3) + 160;
         }
         return manYPos;
     }
@@ -409,6 +420,46 @@ public class Player {
                 m = runningMario;
             }
         }
+        else if (marioForm == 2)
+        {
+            if(run)
+            {
+                marioType = 3;
+                if (direction == 2)
+                {
+                    m = superRunMarioLEFT;
+                }
+                else {
+                    m = superRunMario;
+                }
+            }
+            else if (jump){
+                marioType = 4;
+                if(direction == 2){
+                    m = superJumpMarioLEFT;
+                }
+                else
+                {
+                    m = superjumpingMario;
+                }
+            }
+            else {
+                m = superRunMario;
+            }
+        }
+        else if (marioForm == 3)
+        {
+
+        }
+        else
+        {
+            m = runningMario;
+        }
+
+
+
+
+
         return m;
 
     }

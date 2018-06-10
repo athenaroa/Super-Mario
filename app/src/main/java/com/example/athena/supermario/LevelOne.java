@@ -22,12 +22,15 @@ public class LevelOne {
     private ArrayList<Rect> coinLoc;
     private ArrayList<Rect> blockLoc;
     private ArrayList<Rect> flowerLoc;
+    private ArrayList<Rect> mushroomLoc;
 
     private int score;
 
     private Coins coin;
     private Blocks block;
     private FireFlower flower;
+    private Mushroom mushroom;
+
     private float marioNewYPos;
     private float blockXPos;
     private int hitType;
@@ -48,6 +51,7 @@ public class LevelOne {
         coin = new Coins(context, screenX, screenY);
         block = new Blocks(context, screenX, screenY);
         flower = new FireFlower(context, screenX,screenY);
+        mushroom = new Mushroom(context,screenX,screenY);
 
         background = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         heart = BitmapFactory.decodeResource(context.getResources(), R.drawable.heart);
@@ -64,6 +68,7 @@ public class LevelOne {
         coinLoc = coin.levelOneCoinLoc(screenX,screenY);
         blockLoc =  block.levelOneBlockLoc(screenX,screenY);
         flowerLoc =  flower.levelOneFlowerLoc(screenX,screenY);
+        mushroomLoc = mushroom.levelOneMushroomLoc(screenX,screenY);
     }
 
     public void updateCoinPos( int move){
@@ -83,13 +88,24 @@ public class LevelOne {
     }
 
     public void updateFlowerPos(int move){
-        for(int i = 0; i < blockLoc.size(); i++){
-            Rect newPos = blockLoc.get(i);
-            newPos.set(newPos.left + move, newPos.top,newPos.right + move,newPos.bottom);
-            blockLoc.set(i,newPos);
+        if(flowerLoc != null) {
+            for (int i = 0; i < flowerLoc.size(); i++) {
+                Rect newPos = flowerLoc.get(i);
+                newPos.set(newPos.left + move, newPos.top, newPos.right + move, newPos.bottom);
+                flowerLoc.set(i, newPos);
+            }
         }
     }
 
+    public void updateMushroomPos(int move){
+        if(mushroomLoc != null) {
+            for (int i = 0; i < mushroomLoc.size(); i++) {
+                Rect newPos = mushroomLoc.get(i);
+                newPos.set(newPos.left + move, newPos.top, newPos.right + move, newPos.bottom);
+                mushroomLoc.set(i, newPos);
+            }
+        }
+    }
     public Bitmap getbackground() {
         return background;
     }
@@ -118,6 +134,10 @@ public class LevelOne {
         return flowerLoc;
     }
 
+    public ArrayList<Rect> getMushroomLoc() {
+        return mushroomLoc;
+    }
+
     public Bitmap getCoinBitmap(){
         return coin.getCoinBitmap();
     }
@@ -127,6 +147,8 @@ public class LevelOne {
     }
 
     public Bitmap getFlowerBitmap() {return flower.getFlowerBitmap();}
+
+    public Bitmap getMushroomBitmap() {return mushroom.getMushroomBitmap();}
 
     public void updateMarioVar(float marioXPos, float marioYPos, int marioWidth, int marioHeight){
         this.marioLeftX = marioXPos;
@@ -146,7 +168,7 @@ public class LevelOne {
         this.backFrame = backFrame;
         marioHitCoin();
         marioHitFlower();
-        //updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight);
+        marioHitMushroom();
     }
 
     public void marioHitFlower(){
@@ -289,6 +311,81 @@ public class LevelOne {
             }
         }
     }
+
+    public void marioHitMushroom(){
+        //Removing collected coins
+        if(mushroomLoc != null) {
+            for (int i = 0; i < mushroomLoc.size(); i++) {
+                Rect c = mushroomLoc.get(i);
+
+                //Mario hits left of coin
+                if ((marioRightX >= c.left) && (marioRightX <= c.right) && (marioRightY >= c.top) && (marioLeftY <= c.bottom)) {
+                    if(mushroomLoc.size() == 1) {
+                        mushroomLoc = null;
+                        score += mushroom.getValue();
+                        marioForm = 2;
+                        break;
+                    }
+                    else {
+                        mushroomLoc.remove(i);
+                        score += mushroom.getValue();
+                        break;
+                    }
+                }
+
+                //Mario hits right of coin
+                if ((marioLeftX <= c.right) && (marioLeftX >= c.left) && (marioLeftY <= c.bottom) && (marioRightY >= c.top)) {
+                    if(mushroomLoc.size() == 1) {
+                        mushroomLoc = null;
+                        score += mushroom.getValue();
+                        marioForm = 2;
+                        break;
+                    }
+                    else {
+                        mushroomLoc.remove(i);
+                        score += mushroom.getValue();
+                        marioForm = 2;
+                        break;
+                    }
+                }
+
+                //Mario hits bottom on coin
+                if ((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioLeftY <= c.bottom) && (marioLeftY >= c.top)) {
+                    if(mushroomLoc.size() == 1) {
+                        mushroomLoc = null;
+                        score += mushroom.getValue();
+                        marioForm = 2;
+                        break;
+                    }
+                    else {
+                        mushroomLoc.remove(i);
+                        score += mushroom.getValue();
+                        marioForm = 2;
+                        break;
+                    }
+                }
+
+                //Mario hits top of coin
+                if ((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioRightY >= c.top) && (marioRightY <= c.bottom)) {
+                    if(mushroomLoc.size() == 1) {
+                        mushroomLoc = null;
+                        score += mushroom.getValue();
+                        marioForm = 2;
+                        break;
+                    }
+                    else {
+                        mushroomLoc.remove(i);
+                        score += mushroom.getValue();
+                        marioForm = 2;
+                        break;
+                    }
+                }
+
+
+            }
+        }
+    }
+
 
     public boolean marioOnBlock(){
 

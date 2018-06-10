@@ -306,14 +306,41 @@ public class Player {
     }
 
     public void checkMarioHitGround(){
-        if((manYPos + frameHeight >= ((frameHeight * 5) + 200))){
-            System.out.println("Mario hit the ground");
-            marioType = 1;
-            marioHitGround = true;
-            this.manYPos = (frameHeight * 5) + 200;
-            marioHitTop = false;
-            canceljump(); //Cancel jump because mario should move down anymore
+
+
+        if(marioType == 1 || marioType == 2){
+            if((manYPos + frameHeight >= ((frameHeight * 5) + 200))){
+                System.out.println("Regular Mario hit the ground");
+                marioType = 1;
+                marioHitGround = true;
+                this.manYPos = (frameHeight * 5) + 200;
+                marioHitTop = false;
+                canceljump(); //Cancel jump because mario should move down anymore
+            }
         }
+        else if (marioType == 3 || marioType == 4){
+            if((manYPos + frameHeight >= (frameHeight * 3) + 160)){
+                System.out.println(" Super Mario hit the ground");
+                marioType = 3;
+                marioHitGround = true;
+                this.manYPos = (frameHeight * 3) + 160;
+                marioHitTop = false;
+                canceljump(); //Cancel jump because mario should move down anymore
+            }
+
+        }
+        else if (marioType == 5 || marioType == 6){
+            if((manYPos + frameHeight >= (frameHeight * 3) + 160)){
+                System.out.println(" Fire Mario hit the ground");
+                marioType = 5;
+                marioHitGround = true;
+                this.manYPos = (frameHeight * 3) + 160;
+                marioHitTop = false;
+                canceljump(); //Cancel jump because mario should move down anymore
+            }
+        }
+
+
     }
 
     public void updateY( ){
@@ -381,7 +408,7 @@ public class Player {
             else
             {
                 //System.out.println("Mario is not on top of block: !run and !jump");
-                //this.manYPos +=  marioSpeed; //Mario moving down
+                this.manYPos +=  marioSpeed; //Mario moving down
                 checkMarioHitGround();
             }
         }
@@ -497,11 +524,6 @@ public class Player {
         {
             m = runningMario;
         }
-
-
-
-
-
         return m;
 
     }

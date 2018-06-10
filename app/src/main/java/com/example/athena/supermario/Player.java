@@ -16,6 +16,12 @@ public class Player {
     private Bitmap superRunMarioLEFT;
     private Bitmap superJumpMarioLEFT;
 
+
+    private Bitmap fireRunMario;
+    private Bitmap fireJumpMario;
+    private Bitmap fireRunMarioLEFT;
+    private Bitmap fireJumpMarioLEFT;
+
     private int marioType; //reg running, reg jump...
     private int marioForm; //reg, super, fire
 
@@ -78,6 +84,11 @@ public class Player {
         superJumpMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmarioleft);
 
 
+        fireRunMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.firemario);
+        fireJumpMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.firemariojump);
+        fireRunMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.firemarioleft);
+        fireJumpMarioLEFT = BitmapFactory.decodeResource(context.getResources(),R.drawable.firemariojumpleft);
+
 
 
         jump = false;
@@ -133,6 +144,12 @@ public class Player {
             case 4: //SUPER jumping mario
                 frameWidth = 165;
                 break;
+            case 5: //fire running mario
+                frameWidth = 180;
+                break;
+            case 6: //fire jumping mario
+                frameWidth = 180;
+                break;
         }
         return frameWidth;
     }
@@ -157,9 +174,10 @@ public class Player {
 
 
             case 5: //fire running mario
-                frameHeight = 150;
+                frameHeight = 220;
                 break;
             case 6:  //fire jumping mario
+                frameHeight = 220;
                 break;
         }
         return frameHeight;
@@ -174,6 +192,9 @@ public class Player {
             this.manYPos = (frameHeight * 5) + 200;
         }
         else if (marioType == 3){
+            this.manYPos = (frameHeight * 3) + 160;
+        }
+        else if (marioType == 5){
             this.manYPos = (frameHeight * 3) + 160;
         }
         return manYPos;
@@ -382,8 +403,6 @@ public class Player {
         this.jump = false;
     }
 
-
-
     public void updateMarioForm(int newForm){
         //1 : reg mario
         //2 : super mario
@@ -449,7 +468,30 @@ public class Player {
         }
         else if (marioForm == 3)
         {
-
+            if(run)
+            {
+                marioType = 5;
+                if (direction == 2)
+                {
+                    m = fireRunMarioLEFT;
+                }
+                else {
+                    m = fireRunMario;
+                }
+            }
+            else if (jump){
+                marioType = 6;
+                if(direction == 2){
+                    m = fireJumpMarioLEFT;
+                }
+                else
+                {
+                    m = fireJumpMario;
+                }
+            }
+            else {
+                m = fireRunMario;
+            }
         }
         else
         {

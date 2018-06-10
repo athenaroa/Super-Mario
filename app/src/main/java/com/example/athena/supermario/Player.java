@@ -230,10 +230,12 @@ public class Player {
             {
                 if(marioOnBlock){
                     if(direction == 2) {
+                        System.out.println("Does it even go in here??????????? Left");
                         runLeft();
                     }
                     else //Direction is to the right
                     {
+                        System.out.println("Does it even go in here??????????? Right");
                         runRight();
                     }
                 }
@@ -339,6 +341,10 @@ public class Player {
                 canceljump(); //Cancel jump because mario should move down anymore
             }
         }
+        else
+        {
+            System.out.println("Went into else in the check mario hit ground function");
+        }
 
 
     }
@@ -352,6 +358,9 @@ public class Player {
             //No movement in y-direction should occur
             //mario is running and doesnt hit anything
             //or Mario is running and hits an item which means no change in Y should happen
+
+            //System.out.println("Went in hereeeeeeeeeeeeeeeeeeeeeeeeeeee");
+
         }
         else if(!run && jump){ //Mario jumping only
 
@@ -361,7 +370,7 @@ public class Player {
                  if (marioHitABlock){
                     System.out.println("Mario hits a block");
                     if(marioOnBlock){
-                        System.out.printf("Mario on top of a block");
+                        System.out.println("Mario on top of a block");
                         manYPos = prevmanYPos;
                         canceljump();
                         marioHitTop = false;
@@ -377,6 +386,7 @@ public class Player {
                  else{
                      System.out.println("Moving down at this point");
                      this.manYPos +=  marioSpeed*2; //Mario moving down
+                     checkMarioHitGround();
 
                  }
                  checkMarioHitGround();
@@ -396,8 +406,8 @@ public class Player {
                 //Mario is on the block do not change Y
 
                 if(marioHitABlock){
-                    System.out.printf("Mario is still hitting the block");
-                    //this.manYPos = newYPos;
+                    System.out.println("Mario is still hitting the block");
+                    this.manYPos = prevmanYPos;
                 }
                 else
                 {

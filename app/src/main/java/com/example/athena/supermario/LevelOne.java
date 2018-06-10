@@ -21,10 +21,13 @@ public class LevelOne {
     private ArrayList<Bitmap> lifeArray;
     private ArrayList<Rect> coinLoc;
     private ArrayList<Rect> blockLoc;
+    private ArrayList<Rect> flowerLoc;
+
     private int score;
 
     private Coins coin;
     private Blocks block;
+    private FireFlower flower;
     private float marioNewYPos;
     private float blockXPos;
     private int hitType;
@@ -44,6 +47,7 @@ public class LevelOne {
 
         coin = new Coins(context, screenX, screenY);
         block = new Blocks(context, screenX, screenY);
+        flower = new FireFlower(context, screenX,screenY);
 
         background = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         heart = BitmapFactory.decodeResource(context.getResources(), R.drawable.heart);
@@ -59,6 +63,7 @@ public class LevelOne {
 
         coinLoc = coin.levelOneCoinLoc(screenX,screenY);
         blockLoc =  block.levelOneBlockLoc(screenX,screenY);
+        flowerLoc =  flower.levelOneFlowerLoc(screenX,screenY);
     }
 
     public void updateCoinPos( int move){
@@ -70,6 +75,14 @@ public class LevelOne {
     }
 
     public void updateBlockPos( int move){
+        for(int i = 0; i < blockLoc.size(); i++){
+            Rect newPos = blockLoc.get(i);
+            newPos.set(newPos.left + move, newPos.top,newPos.right + move,newPos.bottom);
+            blockLoc.set(i,newPos);
+        }
+    }
+
+    public void updateFlowerPos(int move){
         for(int i = 0; i < blockLoc.size(); i++){
             Rect newPos = blockLoc.get(i);
             newPos.set(newPos.left + move, newPos.top,newPos.right + move,newPos.bottom);
@@ -101,6 +114,10 @@ public class LevelOne {
         return blockLoc;
     }
 
+    public ArrayList<Rect> getFlowerLoc() {
+        return flowerLoc;
+    }
+
     public Bitmap getCoinBitmap(){
         return coin.getCoinBitmap();
     }
@@ -109,6 +126,8 @@ public class LevelOne {
         return block.getBlockBitmap();
     }
 
+    public Bitmap getFlowerBitmap() {return flower.getFlowerBitmap();}
+
     public void updateMarioVar(float marioXPos, float marioYPos, int marioWidth, int marioHeight){
         this.marioLeftX = marioXPos;
         this.marioLeftY = marioYPos;
@@ -116,49 +135,151 @@ public class LevelOne {
         this.marioRightY = marioYPos + marioHeight;
     }
 
+    public void updateMarioBitmap(){
+
+    }
+
+
     public void update(float marioXPos, float marioYPos, int marioWidth, int marioHeight, int backFrame){
         updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight); //locally updates mario's position
         this.backFrame = backFrame;
         marioHitCoin();
+        marioHitFlower();
         //updateMarioVar(marioXPos,marioYPos, marioWidth, marioHeight);
+    }
+
+    public void marioHitFlower(){
+        //Removing collected flowers
+        if(flowerLoc != null) {
+            for (int i = 0; i < flowerLoc.size(); i++) {
+                Rect f = flowerLoc.get(i);
+
+                //Mario hits left of flower
+                if ((marioRightX >= f.left) && (marioRightX <= f.right) && (marioRightY >= f.top) && (marioLeftY <= f.bottom)) {
+                    if(i == 0) {
+                        flowerLoc = null;
+                        score += flower.getValue();
+                        break;
+                    }
+                    else {
+                        flowerLoc.remove(i);
+                        score += flower.getValue();
+                        break;
+                    }
+                }
+
+                //Mario hits right of flower
+                if ((marioLeftX <= f.right) && (marioLeftX >= f.left) && (marioLeftY <= f.bottom) && (marioRightY >= f.top)) {
+                    if(i == 0) {
+                        flowerLoc = null;
+                        score += flower.getValue();
+                        break;
+                    }
+                    else {
+                        flowerLoc.remove(i);
+                        score += flower.getValue();
+                        break;
+                    }
+                }
+
+                //Mario hits bottom on coin
+                if ((marioLeftX <= f.right) && (marioRightX >= f.left) && (marioLeftY <= f.bottom) && (marioLeftY >= f.top)) {
+                    if (i == 0) {
+                        flowerLoc = null;
+                        score += flower.getValue();
+                        break;
+                    } else {
+                        flowerLoc.remove(i);
+                        score += flower.getValue();
+                        break;
+                    }
+
+                }
+
+                //Mario hits top of coin
+                if ((marioLeftX <= f.right) && (marioRightX >= f.left) && (marioRightY >= f.top) && (marioRightY <= f.bottom)) {
+                    if(i == 0) {
+                        flowerLoc = null;
+                        score += flower.getValue();
+                        break;
+                    }
+                    else {
+                        flowerLoc.remove(i);
+                        score += flower.getValue();
+                        break;
+                    }
+                }
+
+
+            }
+        }
     }
 
     public void marioHitCoin(){
 
         //Removing collected coins
-        for(int i = 0; i < coinLoc.size(); i++)
-        {
-            Rect c = coinLoc.get(i);
+        if(coinLoc != null) {
+            for (int i = 0; i < coinLoc.size(); i++) {
+                Rect c = coinLoc.get(i);
 
-            //Mario hits left of coin
-            if((marioRightX >= c.left)  && (marioRightX <= c.right) && (marioRightY >= c.top) && (marioLeftY <= c.bottom))
-            {
-                coinLoc.remove(i);
-                score += coin.getValue();
+                //Mario hits left of coin
+                if ((marioRightX >= c.left) && (marioRightX <= c.right) && (marioRightY >= c.top) && (marioLeftY <= c.bottom)) {
+                    if(coinLoc.size() == 1) {
+                        coinLoc = null;
+                        score += coin.getValue();
+                        break;
+                    }
+                    else {
+                        coinLoc.remove(i);
+                        score += coin.getValue();
+                        break;
+                    }
+                }
+
+                //Mario hits right of coin
+                if ((marioLeftX <= c.right) && (marioLeftX >= c.left) && (marioLeftY <= c.bottom) && (marioRightY >= c.top)) {
+                    if(coinLoc.size() == 1) {
+                        coinLoc = null;
+                        score += coin.getValue();
+                        break;
+                    }
+                    else {
+                        coinLoc.remove(i);
+                        score += coin.getValue();
+                        break;
+                    }
+                }
+
+                //Mario hits bottom on coin
+                if ((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioLeftY <= c.bottom) && (marioLeftY >= c.top)) {
+                    if(coinLoc.size() == 1) {
+                        coinLoc = null;
+                        score += coin.getValue();
+                        break;
+                    }
+                    else {
+                        coinLoc.remove(i);
+                        score += coin.getValue();
+                        break;
+                    }
+                }
+
+                //Mario hits top of coin
+                if ((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioRightY >= c.top) && (marioRightY <= c.bottom)) {
+                    if(coinLoc.size() == 1) {
+                        coinLoc = null;
+                        score += coin.getValue();
+                        break;
+                    }
+                    else {
+                        coinLoc.remove(i);
+                        score += coin.getValue();
+                        break;
+                    }
+                }
+
+
             }
-
-            //Mario hits right of coin
-            if((marioLeftX <= c.right) && (marioLeftX >= c.left) && (marioLeftY <= c.bottom) && (marioRightY >= c.top))
-            {
-                coinLoc.remove(i);
-                score += coin.getValue();
-            }
-
-            //Mario hits bottom on coin
-            if((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioLeftY <= c.bottom) && (marioLeftY >= c.top))
-            {
-                coinLoc.remove(i);
-                score += coin.getValue();
-            }
-
-            //Mario hits top of coin
-            if((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioRightY >= c.top) && (marioRightY <= c.bottom))
-            {
-                //coinLoc.remove(i);
-                score += coin.getValue();
-            }
-
-
         }
     }
 
@@ -172,11 +293,11 @@ public class LevelOne {
         {
             Rect b = blockLoc.get(i);
             //Mario hits top of block
-            if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioRightY <= b.top))
+            if((marioCenterX <= b.right + 100) && (marioCenterX >= b.left - 100) && (marioRightY <= b.top))
             {
                 System.out.println("On top of Block i: " + i);
                 result = true;
-                //System.out.println("Mario in on top of Block");
+                System.out.println("Mario in on top of Block");
                 break;
             }
         }

@@ -63,6 +63,7 @@ public class GameView extends SurfaceView implements Runnable {
     private int level;
     ArrayList<Rect> levelCoins;
     ArrayList<Rect> levelBlocks;
+    ArrayList<Rect> levelFlowers;
 
 
 
@@ -85,6 +86,7 @@ public class GameView extends SurfaceView implements Runnable {
         lives =  new ArrayList<>();
         levelCoins = new ArrayList<>();
         levelBlocks = new ArrayList<>();
+        levelFlowers = new ArrayList<>();
 
         //initializing drawing objects
         surfaceHolder = getHolder();
@@ -122,14 +124,14 @@ public class GameView extends SurfaceView implements Runnable {
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
 
         //Checking if mario is on-top of a block in the level and updates the player object
-        if(levelOne.marioOnBlock() == true){
+        if(levelOne.marioOnBlock()){
             player.setMarioOnBlock(true);
         }
         else{
             player.setMarioOnBlock(false);
         }
         //Checking if mario HIT a block in the level and updates the player object
-        if(levelOne.marioHitBlock(player.getFrameWidth(),player.getFrameHeight()) == true)
+        if(levelOne.marioHitBlock(player.getFrameWidth(),player.getFrameHeight()))
         {
             player.setMarioHitABlock(true);
         }
@@ -146,6 +148,7 @@ public class GameView extends SurfaceView implements Runnable {
             backPosX += 5;
             levelOne.updateCoinPos(-5);
             levelOne.updateBlockPos(-5);
+            levelOne.updateFlowerPos(-5);
 
             if(backPosX > getWidth())
             {
@@ -157,6 +160,7 @@ public class GameView extends SurfaceView implements Runnable {
             backPosX -= 5;
             levelOne.updateCoinPos(5);
             levelOne.updateBlockPos(5);
+            levelOne.updateFlowerPos(5);
             if(backPosX < 0- getWidth())
             {
                 backPosX = 0;
@@ -250,17 +254,29 @@ public class GameView extends SurfaceView implements Runnable {
 
             //Drawing Coins
             levelCoins = levelOne.getCoinLoc();
-            for(int i = 0; i < levelOne.getCoinLoc().size(); i++){
-                Rect c = new Rect(levelCoins.get(i).left ,levelCoins.get(i).top,levelCoins.get(i).right ,levelCoins.get(i).bottom);
-                canvas.drawBitmap(levelOne.getCoinBitmap(), null, c, null);
+            if(levelOne.getCoinLoc() != null) {
+                for (int i = 0; i < levelOne.getCoinLoc().size(); i++) {
+                    Rect c = new Rect(levelCoins.get(i).left, levelCoins.get(i).top, levelCoins.get(i).right, levelCoins.get(i).bottom);
+                    canvas.drawBitmap(levelOne.getCoinBitmap(), null, c, null);
+                }
             }
 
             //Drawing Blocks
             levelBlocks = levelOne.getBlockLoc();
             for(int i = 0; i < levelOne.getBlockLoc().size(); i++){
-                Rect c = new Rect(levelBlocks.get(i).left ,levelBlocks.get(i).top,levelBlocks.get(i).right ,levelBlocks.get(i).bottom);
-                canvas.drawBitmap(levelOne.getBlockBitmap(), null, c, null);
+                Rect b = new Rect(levelBlocks.get(i).left ,levelBlocks.get(i).top,levelBlocks.get(i).right ,levelBlocks.get(i).bottom);
+                canvas.drawBitmap(levelOne.getBlockBitmap(), null, b, null);
             }
+
+            //Drawing Flowers
+            levelFlowers = levelOne.getFlowerLoc();
+            if(levelOne.getFlowerLoc() != null) {
+                for (int i = 0; i < levelOne.getFlowerLoc().size(); i++) {
+                    Rect f = new Rect(levelFlowers.get(i).left, levelFlowers.get(i).top, levelFlowers.get(i).right, levelFlowers.get(i).bottom);
+                    canvas.drawBitmap(levelOne.getFlowerBitmap(), null, f, null);
+                }
+            }
+
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

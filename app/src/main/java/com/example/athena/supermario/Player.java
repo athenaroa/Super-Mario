@@ -188,10 +188,9 @@ public class Player {
         if(run && !jump) //Mario is running
         {
             //System.out.println("Run and NOT jump and NOT hit");
-            if(marioHitABlock == true)
+            if(marioHitABlock)
             {
-                System.out.println("Mario hit a block");
-                if(marioOnBlock == true){
+                if(marioOnBlock){
                     if(direction == 2) {
                         runLeft();
                     }
@@ -200,7 +199,6 @@ public class Player {
                         runRight();
                     }
                 }
-
                 else {
                     if (direction == 2) { //Direction is to the left
                         this.manXPos = prevmanXPos + 100; //Pushing mario to the right away from block
@@ -228,13 +226,13 @@ public class Player {
         }
         else if (!run && jump){ //Mario is jumping
             if(direction == 2){
-                this.manXPos -= marioSpeed/2 ;
+                this.manXPos -= marioSpeed ;
                 if (prevmanXPos < minX) {
                     this.manXPos = minX;
                 }
             }
             else{
-                this.manXPos += marioSpeed/2 ;
+                this.manXPos += marioSpeed ;
                 if (prevmanXPos > maxX) {
                     this.manXPos = maxX;
                 }
@@ -271,7 +269,7 @@ public class Player {
 
     public void checkMarioHitGround(){
         if((manYPos + frameHeight >= ((frameHeight * 5) + 200))){
-            System.out.println("Mario hit the ground");
+            //System.out.println("Mario hit the ground");
             this.manYPos = (frameHeight * 5) + 200;
             marioHitTop = false;
             canceljump(); //Cancel jump because mario should move down anymore
@@ -291,14 +289,26 @@ public class Player {
         else if(!run && jump){ //Mario jumping only
 
              checkMarioHitTop();
-             if (marioHitTop || (marioHitABlock && !marioOnBlock)){ //if Mario hit the top or hit A BLOCK
+             if (marioHitTop || (marioHitABlock)){ //if Mario hit the top or hit A BLOCK
 
-                 this.manYPos +=  marioSpeed*2; //Mario moving down
                  if (marioHitABlock){
                     System.out.println("Mario hits a block");
-                    //System.out.println("Hit type: " + hitType);
-                    //marioHitTop = false;
-                    //this.manYPos +=  marioSpeed*2;
+                    if(marioOnBlock){
+                        System.out.printf("Mario on top of a block");
+                        manYPos = prevmanYPos;
+                        canceljump();
+                        marioHitTop = false;
+                    }
+                    else
+                    {
+                        System.out.println("Moving down from block");
+                        this.manYPos +=  marioSpeed*2; //Mario moving down
+                        marioHitTop = false; //can no longer hit the top if it hit the block
+                        canceljump();
+                    }
+                 }
+                 else{
+                     this.manYPos +=  marioSpeed*2; //Mario moving down
                  }
                  checkMarioHitGround();
             }
@@ -311,24 +321,26 @@ public class Player {
         }
         else if (!run && !jump ){ //Mario is not running or jumping; potentially falling or standing still
             //System.out.println("SetmanYPos: Conditional 4");
-            if(marioOnBlock == true){
+            if(marioOnBlock){
                 System.out.println("Mario is on top of block");
                 //Mario is on the block do not change Y
 
-                /*
                 if(marioHitABlock){
                     System.out.printf("Mario is still hitting the block");
-                    this.manYPos = newYPos;
+                    //this.manYPos = newYPos;
                 }
                 else
                 {
                     System.out.println("marioOnBlock is now false");
                     marioOnBlock = false;
                 }
-                */
+
             }
-            else {
-                this.manYPos = (frameHeight * 5) + 200;
+            else
+            {
+                System.out.println("Mario is not on top of block: !run and !jump");
+                this.manYPos +=  marioSpeed*2; //Mario moving down
+                checkMarioHitGround();
             }
         }
         else if (run && jump){

@@ -165,19 +165,22 @@ public class LevelOne {
     public boolean marioOnBlock(){
 
         boolean result = false;
-        float marioCenterX = (marioRightX - marioLeftX)/2;
+        float marioCenterX = marioLeftX + (marioRightX-marioLeftX)/2;
+
 
         for(int i = 0; i < blockLoc.size(); i++)
         {
             Rect b = blockLoc.get(i);
             //Mario hits top of block
-            if((marioCenterX <= b.right) && (marioCenterX >= b.left) && (marioRightY >= b.top))
+            if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioRightY <= b.top))
             {
+                System.out.println("On top of Block i: " + i);
                 result = true;
-                System.out.println("Mario in on top of Block");
+                //System.out.println("Mario in on top of Block");
                 break;
             }
         }
+
         return result;
     }
 

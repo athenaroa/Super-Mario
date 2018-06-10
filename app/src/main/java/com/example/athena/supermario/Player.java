@@ -60,8 +60,7 @@ public class Player {
         superjumpingMario = BitmapFactory.decodeResource(context.getResources(),R.drawable.superjumpmario);
 
 
-        maxX = screenX - runningMario.getWidth();
-        minX = frameWidth;
+
 
         jump = false;
         run = false;
@@ -71,6 +70,10 @@ public class Player {
 
         screenHeight = screenY;
         screenWidth = screenX;
+
+        maxX = screenX - frameWidth;
+        minX = frameWidth;
+
 
     }
 
@@ -182,41 +185,48 @@ public class Player {
     public void updateX(/*int hit, int width*/){
         prevmanXPos = getmanXPos();
 
-        if(run && !jump && !marioHitABlock) //Mario is running freely
+        if(run && !jump) //Mario is running
         {
             //System.out.println("Run and NOT jump and NOT hit");
-            if(direction == 2) {
-                runLeft();
-            }
-            else //Direction is to the right
+            if(marioHitABlock == true)
             {
-                runRight();
-            }
-        }
-        else if(run && !jump && marioHitABlock){ //Mario is running but hit block
-            if(marioOnBlock){
-                //If mario is on top of a block
-                if(direction == 2) {
-                    runLeft();
+                System.out.println("Mario hit a block");
+                if(marioOnBlock == true){
+                    if(direction == 2) {
+                        runLeft();
+                    }
+                    else //Direction is to the right
+                    {
+                        runRight();
+                    }
                 }
-                else //Direction is to the right
+
+                else {
+                    if (direction == 2) { //Direction is to the left
+                        this.manXPos = prevmanXPos + 100; //Pushing mario to the right away from block
+                        marioHitABlock = false; //Set mario hit a block now to false
+                    } else {
+                        this.manXPos = prevmanXPos - 100; //Pushing mario to the left away from block
+                        marioHitABlock = false; //Set mario hit a block now to false
+                    }
+                }
+            }
+
+            else {
+                if (direction == 2) {
+                    runLeft();
+                } else //Direction is to the right
                 {
                     runRight();
                 }
             }
-            else {
-                if (direction == 2) { //Direction is to the left
-                    this.manXPos = prevmanXPos + 50; //Pushing mario to the right away from block
-                } else {
-                    this.manXPos = prevmanXPos - 50; //Pushing mario to the left away from block
-                }
-            }
         }
+
         else if(!run && !jump) //Mario is not running or jumping
         {
             //No move should occur
         }
-        else if (!run && jump){
+        else if (!run && jump){ //Mario is jumping
             if(direction == 2){
                 this.manXPos -= marioSpeed/2 ;
                 if (prevmanXPos < minX) {
@@ -244,7 +254,7 @@ public class Player {
     }
 
     public void setMarioOnBlock(boolean result){
-        this.marioOnBlock = true;
+        this.marioOnBlock = result;
     }
 
     public void setMarioHitABlock(boolean result) {
@@ -281,7 +291,7 @@ public class Player {
         else if(!run && jump){ //Mario jumping only
 
              checkMarioHitTop();
-             if (marioHitTop || marioHitABlock){ //if Mario hit the top or hit A BLOCK
+             if (marioHitTop || (marioHitABlock && !marioOnBlock)){ //if Mario hit the top or hit A BLOCK
 
                  this.manYPos +=  marioSpeed*2; //Mario moving down
                  if (marioHitABlock){
@@ -301,7 +311,7 @@ public class Player {
         }
         else if (!run && !jump ){ //Mario is not running or jumping; potentially falling or standing still
             //System.out.println("SetmanYPos: Conditional 4");
-            if(marioOnBlock){
+            if(marioOnBlock == true){
                 System.out.println("Mario is on top of block");
                 //Mario is on the block do not change Y
 

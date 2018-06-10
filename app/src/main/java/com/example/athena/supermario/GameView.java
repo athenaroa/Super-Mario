@@ -122,14 +122,14 @@ public class GameView extends SurfaceView implements Runnable {
         levelOne.update(player.getmanXPos(), player.getmanYPos(), player.getFrameWidth(), player.getFrameHeight(), backFrame);
 
         //Checking if mario is on-top of a block in the level and updates the player object
-        if(levelOne.marioOnBlock()){
+        if(levelOne.marioOnBlock() == true){
             player.setMarioOnBlock(true);
         }
         else{
             player.setMarioOnBlock(false);
         }
         //Checking if mario HIT a block in the level and updates the player object
-        if(levelOne.marioHitBlock(player.getFrameWidth(),player.getFrameHeight()))
+        if(levelOne.marioHitBlock(player.getFrameWidth(),player.getFrameHeight()) == true)
         {
             player.setMarioHitABlock(true);
         }

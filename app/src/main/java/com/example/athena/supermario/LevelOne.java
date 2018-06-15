@@ -23,6 +23,7 @@ public class LevelOne {
     private ArrayList<Rect> blockLoc;
     private ArrayList<Rect> flowerLoc;
     private ArrayList<Rect> mushroomLoc;
+    private ArrayList<Rect> enemyLoc;
 
     private int score;
 
@@ -30,14 +31,16 @@ public class LevelOne {
     private Blocks block;
     private FireFlower flower;
     private Mushroom mushroom;
+    private Enemies enemies;
 
     private float marioNewYPos;
     private float blockXPos;
     private int hitType;
     private int marioForm;
 
-
     private boolean marioHitItemBox;
+    private boolean marioHitEnemy;
+    private boolean gameOver;
 
     public LevelOne(Context context, int screenX, int screenY) {
 
@@ -55,6 +58,7 @@ public class LevelOne {
         block = new Blocks(context, screenX, screenY);
         flower = new FireFlower(context, screenX,screenY);
         mushroom = new Mushroom(context,screenX,screenY);
+        enemies = new Enemies(context, screenX,screenY);
 
         background = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         heart = BitmapFactory.decodeResource(context.getResources(), R.drawable.heart);
@@ -72,9 +76,16 @@ public class LevelOne {
         blockLoc =  block.levelOneBlockLoc(screenX,screenY);
         flowerLoc =  flower.levelOneFlowerLoc(screenX,screenY);
         mushroomLoc = mushroom.levelOneMushroomLoc(screenX,screenY);
+        enemyLoc = enemies.levelOneEnemyLoc(screenX,screenY);
 
         marioHitItemBox = false;
+        gameOver = false;
+        marioHitEnemy = false;
 
+    }
+
+    public boolean isGameOver(){
+        return gameOver;
     }
 
     public void updateCoinPos( int move){
@@ -112,6 +123,35 @@ public class LevelOne {
             }
         }
     }
+
+    public void updateEnemyPos (int move){
+        if(enemyLoc != null) {
+            for (int i = 0; i < enemyLoc.size(); i++) {
+                Rect newPos = enemyLoc.get(i);
+                newPos.set(newPos.left + move, newPos.top, newPos.right + move, newPos.bottom);
+                enemyLoc.set(i, newPos);
+            }
+        }
+    }
+
+    public void updateLifeArray(){
+        if(marioHitEnemy){
+            if(lifeArray.size() == 1)
+            {
+                lifeArray = null;
+                gameOver = true;
+                //marioHitEnemy = false;
+            }
+            else
+            {
+                lifeArray.remove(lifeArray.size() - 1);
+                marioHitEnemy = false;
+            }
+        }
+    }
+
+
+
     public Bitmap getbackground() {
         return background;
     }
@@ -124,7 +164,11 @@ public class LevelOne {
         return this.score;
     }
 
+
+    //Character Locations
+
     public ArrayList<Bitmap> getLifeArray() {
+        updateLifeArray();
         return lifeArray;
     }
 
@@ -144,6 +188,12 @@ public class LevelOne {
         return mushroomLoc;
     }
 
+    public ArrayList<Rect> getEnemyLoc(){return enemyLoc; }
+
+
+
+    //Charter Bitmaps
+
     public Bitmap getCoinBitmap(){
         return coin.getCoinBitmap();
     }
@@ -156,6 +206,10 @@ public class LevelOne {
 
     public Bitmap getMushroomBitmap() {return mushroom.getMushroomBitmap();}
 
+    public ArrayList<Bitmap> getEnemyBitmap(){return enemies.getEnemyBitmap();}
+
+
+
     public void updateMarioVar(float marioXPos, float marioYPos, int marioWidth, int marioHeight){
         this.marioLeftX = marioXPos;
         this.marioLeftY = marioYPos;
@@ -165,7 +219,6 @@ public class LevelOne {
 
     public int updateMarioForm(){
         return marioForm;
-
     }
 
 
@@ -175,6 +228,7 @@ public class LevelOne {
         marioHitCoin();
         marioHitFlower();
         marioHitMushroom();
+        marioHitEnemy();
     }
 
     public void marioHitFlower(){
@@ -319,7 +373,7 @@ public class LevelOne {
     }
 
     public void marioHitMushroom(){
-        //Removing collected coins
+        //Removing collected mushrooms
         if(mushroomLoc != null) {
             for (int i = 0; i < mushroomLoc.size(); i++) {
                 Rect c = mushroomLoc.get(i);
@@ -390,6 +444,55 @@ public class LevelOne {
 
             }
         }
+    }
+
+
+    public boolean marioHitEnemy(){
+
+
+        if(enemyLoc != null) {
+            for (int i = 0; i < enemyLoc.size(); i++) {
+                Rect c = enemyLoc.get(i);
+
+                //Mario hits left of enemy
+                if ((marioRightX == c.left) && (marioRightX <= c.right) && (marioRightY >= c.top) && (marioLeftY <= c.bottom)) {
+                //if ((marioRightX > c.left) && (marioRightX < (c.left + 10)) && (marioRightY >= c.top) && (marioLeftY <= c.bottom)) {
+                    System.out.println("Mario hit enemy from LEFT");
+                    marioHitEnemy = true;
+                }
+
+                //Mario hits right of enemy
+                if ((marioLeftX == c.right) && (marioLeftX >= c.left) && (marioLeftY <= c.bottom) && (marioRightY >= c.top)) {
+                    System.out.println("Mario hit enemy from RIGHT");
+                    marioHitEnemy = true;
+                }
+
+                //Mario hits bottom on enemy
+                if ((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioLeftY <= c.bottom) && (marioLeftY >= c.top)) {
+                    System.out.println("Mario hit enemy from BOTTOM");
+                    marioHitEnemy = true;
+                }
+
+                //Mario hits top of enemy then the enemy disappears
+                if ((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioRightY >= c.top) && (marioRightY <= c.bottom)) {
+                    System.out.println("Mario hit enemy from TOP");
+                    if(enemyLoc.size() == 1) {
+                        enemyLoc = null;
+                        marioForm = 2;
+                        break;
+                    }
+                    else {
+                        enemyLoc.remove(i);
+                        marioForm = 2;
+                        break;
+                    }
+                }
+            }
+
+
+
+        }
+        return marioHitEnemy;
     }
 
     public boolean marioOnBlock(){

@@ -68,6 +68,7 @@ public class GameView extends SurfaceView implements Runnable {
     ArrayList<Rect> levelBlocks;
     ArrayList<Rect> levelFlowers;
     ArrayList<Rect> levelMushrooms;
+    ArrayList<Rect> levelEnemies;
 
 
 
@@ -92,6 +93,7 @@ public class GameView extends SurfaceView implements Runnable {
         levelBlocks = new ArrayList<>();
         levelFlowers = new ArrayList<>();
         levelMushrooms = new ArrayList<>();
+        levelEnemies = new ArrayList<>();
 
         //initializing drawing objects
         surfaceHolder = getHolder();
@@ -159,6 +161,7 @@ public class GameView extends SurfaceView implements Runnable {
             levelOne.updateBlockPos(-backgroundSpeed);
             levelOne.updateFlowerPos(-backgroundSpeed);
             levelOne.updateMushroomPos(-backgroundSpeed);
+            levelOne.updateEnemyPos(-backgroundSpeed);
 
             if(backPosX > getWidth())
             {
@@ -174,6 +177,8 @@ public class GameView extends SurfaceView implements Runnable {
             levelOne.updateBlockPos(backgroundSpeed);
             levelOne.updateFlowerPos(backgroundSpeed);
             levelOne.updateMushroomPos(backgroundSpeed);
+            levelOne.updateEnemyPos(backgroundSpeed);
+
             if(backPosX < 0- getWidth())
             {
                 backPosX = 0;
@@ -259,12 +264,13 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawText("Score: " + levelOne.getScore(), getWidth()/2, 60, paint);
 
             lives = levelOne.getLifeArray();
-            for(int i = 0; i < levelOne.getLifeArray().size(); i++)
-            {
-                heart = lives.get(i);
-                Rect life = new Rect( 10 + (heart.getWidth() * i) ,10, heart.getWidth() + (heart.getWidth() * i), heart.getHeight());
-                canvas.drawBitmap(heart,null,life,null);
+            if(levelOne.getLifeArray() != null) {
+                for (int i = 0; i < levelOne.getLifeArray().size(); i++) {
+                    heart = lives.get(i);
+                    Rect life = new Rect(10 + (heart.getWidth() * i), 10, heart.getWidth() + (heart.getWidth() * i), heart.getHeight());
+                    canvas.drawBitmap(heart, null, life, null);
 
+                }
             }
 
             //Drawing Coins
@@ -302,10 +308,25 @@ public class GameView extends SurfaceView implements Runnable {
             if(levelOne.getMushroomLoc() != null) {
                 for (int i = 0; i < levelOne.getMushroomLoc().size(); i++) {
                     Rect f = new Rect(levelMushrooms.get(i).left, levelMushrooms.get(i).top, levelMushrooms.get(i).right, levelMushrooms.get(i).bottom);
+
+                    /*
+                    if(levelOne.marioHitItemBlock() && (levelMushrooms.get(i).top <= levelOne.getHitBlockLoc())){
+                        canvas.drawBitmap(levelOne.getMushroomBitmap(), null, f, null);
+                    }
+                    */
                     canvas.drawBitmap(levelOne.getMushroomBitmap(), null, f, null);
                 }
             }
 
+
+            //Drawing Enemies
+            levelEnemies = levelOne.getEnemyLoc();
+            if(levelOne.getEnemyLoc() != null) {
+                for (int i = 0; i < levelOne.getEnemyLoc().size(); i++) {
+                    Rect f = new Rect(levelEnemies.get(i).left, levelEnemies.get(i).top, levelEnemies.get(i).right, levelEnemies.get(i).bottom);
+                    canvas.drawBitmap(levelOne.getEnemyBitmap().get(i), null, f, null);
+                }
+            }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }

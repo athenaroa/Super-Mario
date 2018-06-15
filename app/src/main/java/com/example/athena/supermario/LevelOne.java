@@ -396,8 +396,8 @@ public class LevelOne {
         {
             Rect b = blockLoc.get(i);
             //Mario hits top of block
-            //if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
-            if((marioCenterX <= b.right) && (marioCenterX >= b.left) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
+            if((marioLeftX <= b.right) && (marioRightX >= b.left) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
+            //if((marioCenterX <= b.right) && (marioCenterX >= b.left) && (marioRightY >= b.top) && (marioRightY <= b.bottom))
             {
                 System.out.println("On top of Block i: " + i);
                 result = true;

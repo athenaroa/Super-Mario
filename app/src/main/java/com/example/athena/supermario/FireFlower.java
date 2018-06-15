@@ -43,7 +43,7 @@ public class FireFlower {
         Rect flower1;
         flower1 = new Rect(screenX/2, ((screenY/2) + 200) - flowerHeight,
                 ((screenX/2) + flowerWidth), (screenY/2) + 200);
-        flowerLoc.add(flower1);
+       // flowerLoc.add(flower1);
 
         return flowerLoc;
     }

@@ -36,6 +36,9 @@ public class LevelOne {
     private int hitType;
     private int marioForm;
 
+
+    private boolean marioHitItemBox;
+
     public LevelOne(Context context, int screenX, int screenY) {
 
         score = 0;
@@ -69,6 +72,9 @@ public class LevelOne {
         blockLoc =  block.levelOneBlockLoc(screenX,screenY);
         flowerLoc =  flower.levelOneFlowerLoc(screenX,screenY);
         mushroomLoc = mushroom.levelOneMushroomLoc(screenX,screenY);
+
+        marioHitItemBox = false;
+
     }
 
     public void updateCoinPos( int move){
@@ -142,7 +148,7 @@ public class LevelOne {
         return coin.getCoinBitmap();
     }
 
-    public Bitmap getBlockBitmap(){
+    public ArrayList<Bitmap> getBlockBitmap(){
         return block.getBlockBitmap();
     }
 
@@ -409,6 +415,15 @@ public class LevelOne {
         return result;
     }
 
+    public boolean marioHitItemBlock(){
+        return marioHitItemBox;
+    }
+
+    public void updateMarioHitItemBlock(){
+        this.marioHitItemBox = false;
+    }
+
+
     public boolean marioHitBlock(int marioWidth, int marioHeight){
         boolean output = false;
 
@@ -445,6 +460,12 @@ public class LevelOne {
                 blockXPos = b.left;
                 System.out.println("Mario hits from bottom");
                 hitType = 3;
+
+                if(getBlockBitmap().get(i).equals(block.coinBlock)){
+                    this.marioHitItemBox = true;
+                }
+
+
 
             }
 

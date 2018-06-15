@@ -11,15 +11,21 @@ import java.util.ArrayList;
 public class Blocks {
 
     Bitmap block;
+    Bitmap coinBlock;
+
     private int blockWidth;
     private int blockHeight;
     private ArrayList<Rect> blockLoc;
+    private ArrayList<Bitmap> blockBitmap;
 
     public Blocks(Context context, int screenX, int screenY){
         block = BitmapFactory.decodeResource(context.getResources(),R.drawable.block);
+        coinBlock = BitmapFactory.decodeResource(context.getResources(),R.drawable.coinblock);
         blockWidth = block.getWidth();
         blockHeight = block.getHeight();
         blockLoc = new ArrayList<>();
+        blockBitmap =  new ArrayList<>();
+
 
     }
 
@@ -31,10 +37,9 @@ public class Blocks {
         return blockHeight;
     }
 
-    public Bitmap getBlockBitmap() {
-        return block;
+    public ArrayList<Bitmap> getBlockBitmap() {
+        return blockBitmap;
     }
-
 
     public ArrayList<Rect> levelOneBlockLoc (int screenX, int screenY){
         Rect block1, block2, block3;
@@ -46,8 +51,14 @@ public class Blocks {
         blockLoc.add(block1);
         blockLoc.add(block2);
 
+        blockBitmap.add(coinBlock);
+        blockBitmap.add(block);
+
         return blockLoc;
     }
+
+
+
 
 
 

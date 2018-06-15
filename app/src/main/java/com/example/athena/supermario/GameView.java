@@ -280,7 +280,7 @@ public class GameView extends SurfaceView implements Runnable {
             levelBlocks = levelOne.getBlockLoc();
             for(int i = 0; i < levelOne.getBlockLoc().size(); i++){
                 Rect b = new Rect(levelBlocks.get(i).left ,levelBlocks.get(i).top,levelBlocks.get(i).right ,levelBlocks.get(i).bottom);
-                canvas.drawBitmap(levelOne.getBlockBitmap(), null, b, null);
+                canvas.drawBitmap(levelOne.getBlockBitmap().get(i), null, b, null);
             }
 
             //Drawing Flowers
@@ -288,7 +288,12 @@ public class GameView extends SurfaceView implements Runnable {
             if(levelOne.getFlowerLoc() != null) {
                 for (int i = 0; i < levelOne.getFlowerLoc().size(); i++) {
                     Rect f = new Rect(levelFlowers.get(i).left, levelFlowers.get(i).top, levelFlowers.get(i).right, levelFlowers.get(i).bottom);
-                    canvas.drawBitmap(levelOne.getFlowerBitmap(), null, f, null);
+
+                    if(levelOne.marioHitItemBlock() && (levelFlowers.get(i).top <= levelOne.getHitBlockLoc())){
+                        canvas.drawBitmap(levelOne.getFlowerBitmap(), null, f, null);
+                    }
+
+                    //canvas.drawBitmap(levelOne.getFlowerBitmap(), null, f, null);
                 }
             }
 

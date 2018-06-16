@@ -461,18 +461,21 @@ public class LevelOne {
                 if((marioRightX  >= c.left)  && (marioRightX <= c.right) && (marioRightY >= c.top) && (marioLeftY <= c.bottom)){
                 //if ((marioRightX >= c.left) && (marioRightX <= c.right) && (marioRightY >= c.top) /*&& (marioLeftY <= c.bottom)*/) {
                     System.out.println("Mario hit enemy from LEFT");
+                    marioForm = 1;
                     marioHitEnemy = true;
                 }
 
                 //Mario hits right of enemy
                 if((marioLeftX <= c.right) && (marioLeftX >= c.left) && (marioLeftY <= c.bottom) && (marioRightY >= c.top)){
                     System.out.println("Mario hit enemy from RIGHT");
+                    marioForm = 1;
                     marioHitEnemy = true;
                 }
 
                 //Mario hits bottom on enemy
                 if ((marioLeftX <= c.right) && (marioRightX >= c.left) && (marioLeftY <= c.bottom) && (marioLeftY >= c.top)) {
                     System.out.println("Mario hit enemy from BOTTOM");
+                    marioForm = 1;
                     marioHitEnemy = true;
                 }
 

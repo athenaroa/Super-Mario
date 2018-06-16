@@ -37,7 +37,7 @@ public class GameView extends SurfaceView implements Runnable {
     private int motion;
     private int backPosX;
     private int backFrame;
-    private final int backgroundSpeed = 8;
+    private final int backgroundSpeed = 12;
     private int midScreenPos;
 
 
@@ -167,7 +167,7 @@ public class GameView extends SurfaceView implements Runnable {
         //update coordinates of the background
         //if(motion == 1 && (player.getmanXPos() > (getWidth()* 3)/4) && (player.getDirection() == 1)) {
         if(motion == 1 && (player.getmanXPos() > midScreenPos) && (player.getDirection() == 1)){
-            player.changeMarioSpeed(-7);
+            player.changeMarioSpeed(-9);
             backPosX += backgroundSpeed;
             levelOne.updateCoinPos(-backgroundSpeed);
             levelOne.updateBlockPos(-backgroundSpeed);
@@ -183,8 +183,8 @@ public class GameView extends SurfaceView implements Runnable {
         }
         //else if(motion == 1 && (player.getmanXPos() < (getWidth()/4)) && (player.getDirection() == 2)) {
         else if(motion == 1 && (player.getmanXPos() < midScreenPos) && (player.getDirection() == 2)) {
-            player.changeMarioSpeed(-7);
-            backPosX -= 5;
+            player.changeMarioSpeed(-9);
+            backPosX -= backgroundSpeed;
             levelOne.updateCoinPos(backgroundSpeed);
             levelOne.updateBlockPos(backgroundSpeed);
             levelOne.updateFlowerPos(backgroundSpeed);

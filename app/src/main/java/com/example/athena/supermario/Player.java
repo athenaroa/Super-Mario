@@ -69,7 +69,7 @@ public class Player {
         marioForm = 1;
         marioSpeed = 10;
         marioMaxSpeed = 10;
-        marioMinSpeed = 2;
+        marioMinSpeed = 1;
         marioJumpingSpeed = marioSpeed*6;
 
 

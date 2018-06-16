@@ -153,8 +153,6 @@ public class LevelOne {
         }
     }
 
-
-
     public Bitmap getbackground() {
         return background;
     }
@@ -232,7 +230,42 @@ public class LevelOne {
         marioHitFlower();
         marioHitMushroom();
         marioHitEnemy();
+        marioInRangePlant();
     }
+
+
+    public void marioInRangePlant(){
+
+        int index = 0;
+        Rect p = null;
+
+        if(enemyLoc != null) {
+            for (int i = 0; i < getEnemyBitmap().size(); i++) {
+                if((getEnemyBitmap().get(i) == enemies.piranhaPlantUP) ||(getEnemyBitmap().get(i) == enemies.piranhaPlantDOWN)){
+                    p = getEnemyLoc().get(i);
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        if(p != null){
+            if(marioRightX >= p.left - 200)
+            {
+                enemies.updateEnemyBitmap(index,enemies.piranhaPlantDOWN);
+            }
+            else
+            {
+                enemies.updateEnemyBitmap(index,enemies.piranhaPlantUP);
+            }
+        }
+        else //There is no piranha plant so return false
+        {
+            System.out.println("There is not piranha plant here");
+        }
+
+    }
+
 
     public void marioHitFlower(){
         //Removing collected flowers
@@ -484,12 +517,15 @@ public class LevelOne {
                     System.out.println("Mario hit enemy from TOP");
                     if(enemyLoc.size() == 1) {
                         enemyLoc = null;
-                        marioForm = 2;
+                        //marioForm = 1;
                         break;
                     }
                     else {
                         enemyLoc.remove(i);
-                        marioForm = 2;
+                        enemies.deleteEnemyBitmap(i);
+                        lifeArray.add(heart); //it deletes a life when killing buzzy
+
+                        //marioForm = 2;
                         break;
                     }
                 }

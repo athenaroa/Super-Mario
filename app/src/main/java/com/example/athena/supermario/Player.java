@@ -54,7 +54,7 @@ public class Player {
     private boolean marioOnBlock;
     private boolean marioHitABlock;
     private boolean marioHitGround;
-
+    private boolean marioHitEnemy;
 
 
 
@@ -108,6 +108,7 @@ public class Player {
         marioOnBlock = false;
         marioHitABlock = false;
         marioHitGround = true;
+        marioHitEnemy = false;
 
         screenHeight = screenY;
         screenWidth = screenX;
@@ -257,7 +258,7 @@ public class Player {
         if(run && !jump) //Mario is running
         {
             //System.out.println("Run and NOT jump and NOT hit");
-            if(marioHitABlock)
+            if(marioHitABlock || marioHitEnemy)
             {
                 if(marioOnBlock){
                     if(direction == 2) {
@@ -274,9 +275,11 @@ public class Player {
                     if (direction == 2) { //Direction is to the left
                         this.manXPos = prevmanXPos + 100; //Pushing mario to the right away from block
                         marioHitABlock = false; //Set mario hit a block now to false
+                        marioHitEnemy = false;
                     } else {
                         this.manXPos = prevmanXPos - 100; //Pushing mario to the left away from block
                         marioHitABlock = false; //Set mario hit a block now to false
+                        marioHitEnemy = false;
                     }
                 }
             }
@@ -329,6 +332,8 @@ public class Player {
     public void setMarioHitABlock(boolean result) {
         this.marioHitABlock = result;
     }
+
+    public void setMarioHitEnemy(boolean result) {this.marioHitEnemy = result;}
 
     public void checkMarioHitTop(){
         if( (manYPos <= ( screenHeight/2 - frameHeight) )) //

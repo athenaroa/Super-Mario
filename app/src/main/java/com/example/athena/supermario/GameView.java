@@ -148,6 +148,15 @@ public class GameView extends SurfaceView implements Runnable {
             player.setMarioHitABlock(false);
         }
 
+        //Checking if mario HIT a enemy in the level and updates the player object
+        if(levelOne.marioHitEnemy()){
+            player.setMarioHitEnemy(true);
+        }
+        else
+        {
+            player.setMarioHitEnemy(false);
+        }
+
         //update mario position
         player.updateMarioPos();
 
@@ -257,21 +266,11 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawBitmap(player.getBitmap(),frameToDraw,whereToDraw,null);
 
 
-            //Drawing Mario lives and Score
+            //Drawing Score
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
             paint.setTextSize(60);
             canvas.drawText("Score: " + levelOne.getScore(), getWidth()/2, 60, paint);
-
-            lives = levelOne.getLifeArray();
-            if(levelOne.getLifeArray() != null) {
-                for (int i = 0; i < levelOne.getLifeArray().size(); i++) {
-                    heart = lives.get(i);
-                    Rect life = new Rect(10 + (heart.getWidth() * i), 10, heart.getWidth() + (heart.getWidth() * i), heart.getHeight());
-                    canvas.drawBitmap(heart, null, life, null);
-
-                }
-            }
 
             //Drawing Coins
             levelCoins = levelOne.getCoinLoc();
@@ -318,13 +317,23 @@ public class GameView extends SurfaceView implements Runnable {
                 }
             }
 
-
             //Drawing Enemies
             levelEnemies = levelOne.getEnemyLoc();
             if(levelOne.getEnemyLoc() != null) {
                 for (int i = 0; i < levelOne.getEnemyLoc().size(); i++) {
                     Rect f = new Rect(levelEnemies.get(i).left, levelEnemies.get(i).top, levelEnemies.get(i).right, levelEnemies.get(i).bottom);
                     canvas.drawBitmap(levelOne.getEnemyBitmap().get(i), null, f, null);
+                }
+            }
+
+            //Drawing Lives
+            lives = levelOne.getLifeArray();
+            if(levelOne.getLifeArray() != null) {
+                for (int i = 0; i < levelOne.getLifeArray().size(); i++) {
+                    heart = lives.get(i);
+                    Rect life = new Rect(10 + (heart.getWidth() * i), 10, heart.getWidth() + (heart.getWidth() * i), heart.getHeight());
+                    canvas.drawBitmap(heart, null, life, null);
+
                 }
             }
             surfaceHolder.unlockCanvasAndPost(canvas);

@@ -449,20 +449,20 @@ public class LevelOne {
 
     public boolean marioHitEnemy(){
 
-
         if(enemyLoc != null) {
             for (int i = 0; i < enemyLoc.size(); i++) {
+
                 Rect c = enemyLoc.get(i);
 
                 //Mario hits left of enemy
-                if ((marioRightX == c.left) && (marioRightX <= c.right) && (marioRightY >= c.top) && (marioLeftY <= c.bottom)) {
-                //if ((marioRightX > c.left) && (marioRightX < (c.left + 10)) && (marioRightY >= c.top) && (marioLeftY <= c.bottom)) {
+                if((marioRightX  >= c.left)  && (marioRightX <= c.right) && (marioRightY >= c.top) && (marioLeftY <= c.bottom)){
+                //if ((marioRightX >= c.left) && (marioRightX <= c.right) && (marioRightY >= c.top) /*&& (marioLeftY <= c.bottom)*/) {
                     System.out.println("Mario hit enemy from LEFT");
                     marioHitEnemy = true;
                 }
 
                 //Mario hits right of enemy
-                if ((marioLeftX == c.right) && (marioLeftX >= c.left) && (marioLeftY <= c.bottom) && (marioRightY >= c.top)) {
+                if((marioLeftX <= c.right) && (marioLeftX >= c.left) && (marioLeftY <= c.bottom) && (marioRightY >= c.top)){
                     System.out.println("Mario hit enemy from RIGHT");
                     marioHitEnemy = true;
                 }
@@ -488,9 +488,6 @@ public class LevelOne {
                     }
                 }
             }
-
-
-
         }
         return marioHitEnemy;
     }

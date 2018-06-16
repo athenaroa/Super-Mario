@@ -135,17 +135,20 @@ public class LevelOne {
     }
 
     public void updateLifeArray(){
-        if(marioHitEnemy){
-            if(lifeArray.size() == 1)
-            {
-                lifeArray = null;
-                gameOver = true;
-                //marioHitEnemy = false;
+        if(marioHitEnemy) {
+            if (lifeArray != null) {
+                if (lifeArray.size() == 1) {
+                    lifeArray = null;
+                    gameOver = true;
+                    //marioHitEnemy = false;
+                } else {
+                    lifeArray.remove(lifeArray.size() - 1);
+                    marioHitEnemy = false;
+                }
             }
             else
             {
-                lifeArray.remove(lifeArray.size() - 1);
-                marioHitEnemy = false;
+                lifeArray = null;
             }
         }
     }
@@ -564,8 +567,6 @@ public class LevelOne {
                 if(getBlockBitmap().get(i).equals(block.coinBlock)){
                     this.marioHitItemBox = true;
                 }
-
-
 
             }
 

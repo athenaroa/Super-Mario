@@ -70,7 +70,8 @@ public class GameView extends SurfaceView implements Runnable {
     ArrayList<Rect> levelMushrooms;
     ArrayList<Rect> levelEnemies;
 
-
+    private int screenWidth;
+    private int screenHeight;
 
     Bitmap bitmap;
     Bitmap back;
@@ -106,6 +107,8 @@ public class GameView extends SurfaceView implements Runnable {
         jumpTimeMax = 1000;
         backFrame = 1;
         midScreenPos = screenX/2;
+        screenWidth = screenX;
+        screenHeight = screenY;
 
     }
 
@@ -336,7 +339,19 @@ public class GameView extends SurfaceView implements Runnable {
 
                 }
             }
-            
+            else
+            {
+                Paint paint1 = new Paint();
+                paint1.setColor(Color.BLACK);
+                canvas.drawRect(0,0,screenWidth,screenHeight, paint1);
+
+
+                paint.setColor(Color.WHITE);
+                paint.setTextSize(200);
+                canvas.drawText("GAME OVER", 350, screenHeight/2 + 100, paint);
+
+            }
+
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
